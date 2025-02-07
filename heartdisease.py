@@ -291,15 +291,14 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
     except Exception as e:
         st.error(f"Error durante la descompresión: {str(e)}")
-        
+
+    # Buscar el archivo del modelo dentro de la carpeta extraída
     model_path = None
         for root, _, files in os.walk(extract_path):
             for file in files:
                 if file.endswith(".h5"):
                     model_path = os.path.join(root, file)
-                    break
-                    
-                    
+                    break                    
         if model_path:
             # Cargar el modelo
             model = tf.keras.models.load_model(model_path)
@@ -317,38 +316,35 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
     if selected_column=='Por defecto':
-        # Buscar el archivo del modelo dentro de la carpeta extraída
+        st.write("### Indique los datos por defecto que desea uasr para la predicción")
+        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'])
+
+        if data_model=='Datos 1':
+            input_data = X_train[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            st.write("Datos de entrada:", input_data)
+
+        if data_model=='Datos 2':
+            input_data = X_train[1].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            st.write("Datos de entrada:", input_data)
+
+        if data_model=='Datos 3':
+            input_data = X_train[2].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            st.write("Datos de entrada:", input_data)
+
+        if data_model=='Datos 4':
+            input_data = X_train[3].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            st.write("Datos de entrada:", input_data)
+
+        if data_model=='Datos 5':
+            input_data = X_train[4].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            st.write("Datos de entrada:", input_data)
         
-            st.write("### Indique los datos por defecto que desea uasr para la predicción")
-            data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'])
-
-            if data_model=='Datos 1':
-                input_data = X_train[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-                st.write("Datos de entrada:", input_data)
-
-            if data_model=='Datos 2':
-                input_data = X_train[1].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-                st.write("Datos de entrada:", input_data)
-
-            if data_model=='Datos 3':
-                input_data = X_train[2].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-                st.write("Datos de entrada:", input_data)
-
-            if data_model=='Datos 4':
-                input_data = X_train[3].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-                st.write("Datos de entrada:", input_data)
-
-            if data_model=='Datos 5':
-                input_data = X_train[4].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-                st.write("Datos de entrada:", input_data)
-
-            
-            # Realizar predicción
-            prediction = model.predict(input_data)
-            st.write("Predicción del modelo:", prediction)
-        else:
-            st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
-        
+        # Realizar predicción
+        prediction = model.predict(input_data)
+        st.write("Predicción del modelo:", prediction)
+    else:
+        st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
+    
         
     if selected_column=='Manual':
         st.write("Introduzaca ")

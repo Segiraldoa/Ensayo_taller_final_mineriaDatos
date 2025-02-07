@@ -281,9 +281,10 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
 
-    if selected_column='Por defecto':
+    if selected_column=='Por defecto':
         print("bien")
-    if selected_column='Manual':
+    if selected_column=='Manual':
+        print("bien2")
     # Mostrar resultado
     # st.write(f"### Información de la columna: `{selected_column}`")
     # st.write(f"- **Valores totales:** {total_values}")

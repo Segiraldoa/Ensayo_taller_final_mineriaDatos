@@ -283,9 +283,16 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
 
     zip_path = "modelo_entrenado_comprimido.zip"
     extract_path = "modelo_descomprimido"
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            zip_ref.extractall(extract_path)
         st.success("Descompresión completada.")
+    except zipfile.BadZipFile:
+        st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
+    except zipfile.LargeZipFile:
+        st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
+    except Exception as e:
+        st.error(f"Error durante la descompresión: {str(e)}")
         
     if selected_column=='Por defecto':
         st.write("bien")

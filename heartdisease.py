@@ -304,6 +304,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
                     model_path = os.path.join(root, file)
                     break
                     
+                    
         if model_path:
             # Cargar el modelo
             model = tf.keras.models.load_model(model_path)

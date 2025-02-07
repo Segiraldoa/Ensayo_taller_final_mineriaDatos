@@ -291,13 +291,8 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
     except Exception as e:
         st.error(f"Error durante la descompresión: {str(e)}")
-    
-    st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
-    selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
-    if selected_column=='Por defecto':
-        st.write("bien")
-        # Buscar el archivo del modelo dentro de la carpeta extraída
-        model_path = None
+        
+    model_path = None
         for root, _, files in os.walk(extract_path):
             for file in files:
                 if file.endswith(".h5"):
@@ -318,6 +313,12 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             y_encoded = label_encoder.fit_transform(y)
             X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
+    
+    st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
+    selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
+    if selected_column=='Por defecto':
+        # Buscar el archivo del modelo dentro de la carpeta extraída
+        
             st.write("### Indique los datos por defecto que desea uasr para la predicción")
             data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'])
 
@@ -350,4 +351,4 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         
         
     if selected_column=='Manual':
-        st.write("")
+        st.write("Introduzaca ")

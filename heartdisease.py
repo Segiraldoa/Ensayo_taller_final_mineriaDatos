@@ -284,7 +284,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     try:
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_path)
-        st.success("Descompresión completada.")
+        # st.success("Descompresión completada.")
     except zipfile.BadZipFile:
         st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
     except zipfile.LargeZipFile:
@@ -307,7 +307,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         if model_path:
             # Cargar el modelo
             model = tf.keras.models.load_model(model_path)
-            st.success("Modelo cargado correctamente.")
+            # st.success("Modelo cargado correctamente.")
             X = heartdisease.iloc[:, :-1]
             y = heartdisease['Cath']
             X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
@@ -348,10 +348,5 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
         
         
-        
     if selected_column=='Manual':
-        st.write("bien2")   
-
-    
-
-    
+        st.write("")

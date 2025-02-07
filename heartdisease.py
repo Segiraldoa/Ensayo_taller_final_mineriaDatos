@@ -294,23 +294,23 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
 
     # Buscar el archivo del modelo dentro de la carpeta extraída
     model_path = None
-        for root, _, files in os.walk(extract_path):
-            for file in files:
-                if file.endswith(".h5"):
-                    model_path = os.path.join(root, file)
-                    break                    
-        if model_path:
-            # Cargar el modelo
-            model = tf.keras.models.load_model(model_path)
-            # st.success("Modelo cargado correctamente.")
-            X = heartdisease.iloc[:, :-1]
-            y = heartdisease['Cath']
-            X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X_encoded)
-            label_encoder = LabelEncoder()
-            y_encoded = label_encoder.fit_transform(y)
-            X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
+    for root, _, files in os.walk(extract_path):
+        for file in files:
+            if file.endswith(".h5"):
+                model_path = os.path.join(root, file)
+                break                    
+    if model_path:
+        # Cargar el modelo
+        model = tf.keras.models.load_model(model_path)
+        # st.success("Modelo cargado correctamente.")
+        X = heartdisease.iloc[:, :-1]
+        y = heartdisease['Cath']
+        X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X_encoded)
+        label_encoder = LabelEncoder()
+        y_encoded = label_encoder.fit_transform(y)
+        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
     
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")

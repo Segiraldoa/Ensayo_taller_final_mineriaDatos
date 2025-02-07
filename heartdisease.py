@@ -281,29 +281,20 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
 
+    zip_path = "modelo_entrenado_comprimido.zip"
+    extract_path = "modelo_descomprimido"
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_path)
+        st.success("Descompresión completada.")
+        
     if selected_column=='Por defecto':
         st.write("bien")
-    if selected_column=='Manual':
-        st.write("bien2")
-    # Mostrar resultado
-    # st.write(f"### Información de la columna: `{selected_column}`")
-    # st.write(f"- **Valores totales:** {total_values}")
-    # st.write(f"- **Valores faltantes:** {missing_values} ({missing_percentage:.2f}%)")
-    
-    # if st.button("Mostrar todos los valores faltantes"):
-    #     missing_total = heartdisease.isnull().sum()
-    #     missing_total_df = pd.DataFrame({"Columna": missing_total.index, "Valores Faltantes": missing_total.values})
         
-    #     # Filtrar solo las columnas con valores faltantes
-    #     missing_total_df = missing_total_df[missing_total_df["Valores Faltantes"] > 0]
-    #     st.write(missing_total_df)
-    
-    # zip_path = "modelo_entrenado_comprimido.zip"
-    # extract_path = "modelo_descomprimido"
-    # with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-    #     zip_ref.extractall(extract_path)
-    #     st.success("Descompresión completada.")
 
+        
+    if selected_column=='Manual':
+        st.write("bien2")   
+    # 
     # # Buscar el archivo del modelo dentro de la carpeta extraída
     # model_path = None
     # for root, _, files in os.walk(extract_path):

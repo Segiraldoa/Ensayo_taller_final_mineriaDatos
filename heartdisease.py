@@ -270,49 +270,69 @@ if st.sidebar.checkbox("Escalado de datos"):
         st.write(f"Vista previa de los datos escalados usando '{strategy}':")
         st.dataframe(scaled_data.head())
 # Modelo de redes neuronales
-if st.sidebar.checkbox("Utilizar redes Neuronales"):
+if st.sidebar.checkbox("Utilizar redes Neuronales"): 
     st.write("### Redes Neuronales")
     
     st.write("""
     El modelo utilizado consiste en una red neuronal de una capa con 32 neuronas de entrada.
     La base de datos fue codificada con One Hot Encoder y estandarizada con StandardScaler.
     """)
-    zip_path = "modelo_entrenado_comprimido.zip"
-    extract_path = "modelo_descomprimido"
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
-        st.success("Descompresión completada.")
+    
+    st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
+    selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
 
-    # Buscar el archivo del modelo dentro de la carpeta extraída
-    model_path = None
-    for root, _, files in os.walk(extract_path):
-        for file in files:
-            if file.endswith(".h5"):
-                model_path = os.path.join(root, file)
-                break
+    if selected_column='Por defecto':
+        print("bien")
+    if selected_column='Manual':
+    # Mostrar resultado
+    # st.write(f"### Información de la columna: `{selected_column}`")
+    # st.write(f"- **Valores totales:** {total_values}")
+    # st.write(f"- **Valores faltantes:** {missing_values} ({missing_percentage:.2f}%)")
+    
+    # if st.button("Mostrar todos los valores faltantes"):
+    #     missing_total = heartdisease.isnull().sum()
+    #     missing_total_df = pd.DataFrame({"Columna": missing_total.index, "Valores Faltantes": missing_total.values})
+        
+    #     # Filtrar solo las columnas con valores faltantes
+    #     missing_total_df = missing_total_df[missing_total_df["Valores Faltantes"] > 0]
+    #     st.write(missing_total_df)
+    
+    # zip_path = "modelo_entrenado_comprimido.zip"
+    # extract_path = "modelo_descomprimido"
+    # with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+    #     zip_ref.extractall(extract_path)
+    #     st.success("Descompresión completada.")
 
-    if model_path:
-        # Cargar el modelo
-        st.info("Cargando modelo...")
-        model = tf.keras.models.load_model(model_path)
-        st.success("Modelo cargado correctamente.")
-        X = heartdisease.iloc[:, :-1]
-        y = heartdisease['Cath']
-        X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X_encoded)
-        label_encoder = LabelEncoder()
-        y_encoded = label_encoder.fit_transform(y)
-        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
+    # # Buscar el archivo del modelo dentro de la carpeta extraída
+    # model_path = None
+    # for root, _, files in os.walk(extract_path):
+    #     for file in files:
+    #         if file.endswith(".h5"):
+    #             model_path = os.path.join(root, file)
+    #             break
 
-        input_data = X_train[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
-        st.write("Datos de entrada:", input_data)
+    # if model_path:
+    #     # Cargar el modelo
+    #     st.info("Cargando modelo...")
+    #     model = tf.keras.models.load_model(model_path)
+    #     st.success("Modelo cargado correctamente.")
+    #     X = heartdisease.iloc[:, :-1]
+    #     y = heartdisease['Cath']
+    #     X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
+    #     scaler = StandardScaler()
+    #     X_scaled = scaler.fit_transform(X_encoded)
+    #     label_encoder = LabelEncoder()
+    #     y_encoded = label_encoder.fit_transform(y)
+    #     X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
-        # Realizar predicción
-        prediction = model.predict(input_data)
-        st.write("Predicción del modelo:", prediction)
-    else:
-        st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
+    #     input_data = X_train[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+    #     st.write("Datos de entrada:", input_data)
+
+    #     # Realizar predicción
+    #     prediction = model.predict(input_data)
+    #     st.write("Predicción del modelo:", prediction)
+    # else:
+    #     st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
     
 
     

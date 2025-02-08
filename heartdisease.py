@@ -369,39 +369,63 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             y_encoded = label_encoder.fit_transform(y)
             X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
-        # Definir los nombres de las columnas según la estructura esperada
+        
+        # Definir las columnas
         column_names = [
             "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",
             "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", "Weak Peripheral Pulse", "Lung rales",
             "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", "Function Class", "Atypical", "Nonanginal",
             "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", "Tinversion", "LVH", "Poor R Progression",
             "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
-            "Region RWMA", "Cath"
+            "Region RWMA"
         ]
         
-        # Crear un DataFrame inicial con una fila de ceros
-        df = pd.DataFrame(np.zeros((1, len(column_names))), columns=column_names)
+        # Variables categóricas y sus opciones
+        categorical_columns = {
+            "Sex": ["Male", "Female"],
+            "Current Smoker": ["Yes", "No"],
+            "EX-Smoker": ["Yes", "No"],
+            "FH": ["Yes", "No"],
+            "Obesity": ["Yes", "No"],
+            "CRF": ["Yes", "No"],
+            "CVA": ["Yes", "No"],
+            "Airway disease": ["Yes", "No"],
+            "Thyroid Disease": ["Yes", "No"],
+            "CHF": ["Yes", "No"],
+            "Region RWMA": ["Normal", "Abnormal"]  # Ejempl
+        }
         
-        # Mostrar la tabla editable en Streamlit
-        st.write("Introduce los datos para la predicción:")
-        edited_df = st.data_editor(df, key="editable_table")
+        # Crear inputs en Streamlit
+        st.write("### Introduce los datos para la predicción:")
         
-        # Mostrar la tabla actualizada
-        st.write("Datos ingresados:")
-        st.write(edited_df)
+        # Diccionario para almacenar los datos ingresados
+        user_data = {}
         
-        # Botón para generar la predicción
+        for col in column_names:
+            if col in categorical_columns:
+                user_data[col] = st.selectbox(f"{col}:", categorical_columns[col])
+            else:
+                user_data[col] = st.number_input(f"{col}:", value=0.0)
+        
+        # Botón para la predicción
         if st.button("Realizar predicción"):
             st.write("Procesando los datos para la predicción...")
         
-            # Convertir datos ingresados a numpy para el modelo
-            input_data = edited_df.to_numpy()
+            # Convertir variables categóricas a valores numéricos
+            for col in categorical_columns:
+                user_data[col] = 1 if user_data[col] in ["Yes", "Male", "Abnormal", "Disease"] else 0
         
-            # Aquí iría la llamada a tu modelo de predicción
-            # Ejemplo: prediction = model.predict(input_data)
+            # Crear DataFrame con los datos ingresados
+            input_df = pd.DataFrame([user_data])
+        
+            st.write("Datos procesados para el modelo:")
+            st.write(input_df)
+        
+            # Aquí iría la predicción con el modelo real
             prediction = np.random.rand()  # Simulación de predicción
         
             st.write(f"Predicción realizada: {prediction}")
+
 
 
 

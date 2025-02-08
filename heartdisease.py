@@ -369,16 +369,18 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             y_encoded = label_encoder.fit_transform(y)
             X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
-        st.write("Introduzca los valores correspondientes a cada variable")
-        # Número de filas y columnas de la tabla
-        num_rows = 1  # Cambia según la cantidad de datos que necesites
-        num_cols = 50  # Cambia según la cantidad de características
+        # Definir los nombres de las columnas según la estructura esperada
+        column_names = [
+            "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",
+            "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", "Weak Peripheral Pulse", "Lung rales",
+            "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", "Function Class", "Atypical", "Nonanginal",
+            "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", "Tinversion", "LVH", "Poor R Progression",
+            "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
+            "Region RWMA", "Cath"
+        ]
         
-        # Crear una matriz inicial de ceros
-        initial_data = [[0.0 for _ in range(num_cols)] for _ in range(num_rows)]
-        
-        # Convertir a un DataFrame de pandas
-        df = pd.DataFrame(initial_data, columns=[f"Feature {i}" for i in range(num_cols)])
+        # Crear un DataFrame inicial con una fila de ceros
+        df = pd.DataFrame(np.zeros((1, len(column_names))), columns=column_names)
         
         # Mostrar la tabla editable en Streamlit
         st.write("Introduce los datos para la predicción:")
@@ -391,9 +393,16 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         # Botón para generar la predicción
         if st.button("Realizar predicción"):
             st.write("Procesando los datos para la predicción...")
-            # Aquí podrías conectar el DataFrame con tu modelo de predicción
-            # Ejemplo: prediction = your_model.predict(edited_df.to_numpy())
-            st.write("Predicción realizada.")
+        
+            # Convertir datos ingresados a numpy para el modelo
+            input_data = edited_df.to_numpy()
+        
+            # Aquí iría la llamada a tu modelo de predicción
+            # Ejemplo: prediction = model.predict(input_data)
+            prediction = np.random.rand()  # Simulación de predicción
+        
+            st.write(f"Predicción realizada: {prediction}")
+
 
 
 

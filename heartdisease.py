@@ -369,10 +369,10 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             y_encoded = label_encoder.fit_transform(y)
             X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
-        st.write("Introduzca los valores correspondientes a cada variable")j
+        st.write("Introduzca los valores correspondientes a cada variable")
         # Número de filas y columnas de la tabla
-        num_rows = 10  # Cambia según la cantidad de datos que necesites
-        num_cols = 10  # Cambia según la cantidad de características
+        num_rows = 1  # Cambia según la cantidad de datos que necesites
+        num_cols = 50  # Cambia según la cantidad de características
         
         # Crear una matriz inicial de ceros
         initial_data = [[0.0 for _ in range(num_cols)] for _ in range(num_rows)]

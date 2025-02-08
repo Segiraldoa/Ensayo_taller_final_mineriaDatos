@@ -382,15 +382,19 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
         # Variables categóricas y sus opciones
         categorical_columns = {
             "Sex": ["Male", "Female"],
-            "Current Smoker": ["Yes", "No"],
-            "EX-Smoker": ["Yes", "No"],
-            "FH": ["Yes", "No"],
-            "Obesity": ["Yes", "No"],
-            "CRF": ["Yes", "No"],
-            "CVA": ["Yes", "No"],
-            "Airway disease": ["Yes", "No"],
-            "Thyroid Disease": ["Yes", "No"],
-            "CHF": ["Yes", "No"],
+            "DM": [0,1],
+            "HTN":[0,1],
+            "Current Smoker": [0, 1],
+            "EX-Smoker": [0, 1],
+            "FH": [0, 1],
+            "Obesity": ["Y", "N"],
+            "CRF": ["Y", "N"],
+            "CVA": ["Y", "N"],
+            "Airway disease": ["Y", "N"],
+            "Thyroid Disease": ["Y", "N"],
+            "CHF": ["Y", "N"],
+            "Edema": [0,1],
+            
             "Region RWMA": ["Normal", "Abnormal"],  
             "Cath": ["Normal", "Disease"]  
         }

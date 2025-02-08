@@ -341,10 +341,62 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
 
             
             # Realizar predicción
-            prediction = model.predict(input_data)
+            prediction = np.argmax(model.predict(input_data))
+            # prediction = model.predict(argmax(input_data))
             st.write("Predicción del modelo:", prediction)
         else:
             st.error("No se encontró un archivo .h5 en el ZIP. Verifica el contenido.")
             
     if selected_column=='Manual':
-        st.write("")
+        # Buscar el archivo del modelo dentro de la carpeta extraída
+        model_path = None
+        for root, _, files in os.walk(extract_path):
+            for file in files:
+                if file.endswith(".h5"):
+                    model_path = os.path.join(root, file)
+                    break
+                    
+        if model_path:
+            # Cargar el modelo
+            model = tf.keras.models.load_model(model_path)
+            #st.success("Modelo cargado correctamente.")
+            X = heartdisease.iloc[:, :-1]
+            y = heartdisease['Cath']
+            X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
+            scaler = StandardScaler()
+            X_scaled = scaler.fit_transform(X_encoded)
+            label_encoder = LabelEncoder()
+            y_encoded = label_encoder.fit_transform(y)
+            X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
+
+        st.write("Introduzca los valores correspondientes a cada variable")j
+        # Número de filas y columnas de la tabla
+        num_rows = 10  # Cambia según la cantidad de datos que necesites
+        num_cols = 10  # Cambia según la cantidad de características
+        
+        # Crear una matriz inicial de ceros
+        initial_data = [[0.0 for _ in range(num_cols)] for _ in range(num_rows)]
+        
+        # Convertir a un DataFrame de pandas
+        df = pd.DataFrame(initial_data, columns=[f"Feature {i}" for i in range(num_cols)])
+        
+        # Mostrar la tabla editable en Streamlit
+        st.write("Introduce los datos para la predicción:")
+        edited_df = st.data_editor(df, key="editable_table")
+        
+        # Mostrar la tabla actualizada
+        st.write("Datos ingresados:")
+        st.write(edited_df)
+        
+        # Botón para generar la predicción
+        if st.button("Realizar predicción"):
+            st.write("Procesando los datos para la predicción...")
+            # Aquí podrías conectar el DataFrame con tu modelo de predicción
+            # Ejemplo: prediction = your_model.predict(edited_df.to_numpy())
+            st.write("Predicción realizada.")
+
+
+
+
+
+

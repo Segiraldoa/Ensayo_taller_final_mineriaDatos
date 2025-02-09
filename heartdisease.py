@@ -75,7 +75,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
            
     prediction = model1.predict(df_first_row) 
     # prediction = model.predict(argmax(input_data)) # np.argmax(model_classic.predict(input_data))
-    st.write("datos entrada:", final_data)       
+    # st.write("datos entrada:", final_data)       
     st.write("Predicción del modelo:", prediction)
         
 

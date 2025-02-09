@@ -20,14 +20,6 @@ def load_onehot_encoder():
         onehot_encoder = pickle.load(file)
     return onehot_encoder
 
-# Función para cargar el OneHotEncoder guardado
-# def load_onehot_encoder():
-#     filename = "onehot_encoder_columns.pkl"
-    
-#     # Cargar el archivo en modo lectura binaria
-#     with open(filename, "rb") as file:
-#         onehot_encoder = pickle.load(file)  # ✅ Carga correctamente el objeto
-#     return onehot_encoder
 
 
 
@@ -55,28 +47,32 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     # Mostrar los datos originales
     st.write("🔹 **Datos originales:**")
     st.write(df)
-    
-    # Separar las columnas categóricas
-    categorical_columns = ["Sex","Weak Peripheral Pulse"]
-    numerical_columns = [col for col in df.columns if col not in categorical_columns]
 
-    st.write(type(encoder))  # Debe mostrar: <class 'sklearn.preprocessing._encoders.OneHotEncoder'>
-
-    # Aplicar OneHotEncoder a las variables categóricas
-    # encoded_array = encoder.transform(df[categorical_columns])
-    # encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(categorical_columns))
+    def load_categories():
+        with open("categories.pkl", "rb") as file:
+            return pickle.load(file)  # Devuelve las categorías únicas por columna
     
-    # # Combinar los datos numéricos con los codificados
-    # df_final = df[numerical_columns].reset_index(drop=True).join(encoded_df)
+    categories_dict = load_categories()
     
-    # # Mostrar los datos listos para la predicción
-    # st.write("🔹 **Datos transformados para el modelo:**")
-    # st.write(df_final)
+    # Aplicar One-Hot Encoding usando solo categorías de entrenamiento
+    df_encoded_new = pd.get_dummies(df.iloc[0])
     
-    # # Realizar la predicción cuando el usuario haga clic en el botón
-    # if st.button("🔮 Realizar Predicción"):
-    #     prediction = model.predict(df_final)  # Hacer la predicción
-    #     st.success(f"✅ **Predicción del modelo:** {prediction[0]}")
+    # Verificar que todas las columnas del entrenamiento están en los datos nuevos
+    expected_columns = []
+    for col, categories in categories_dict.items():
+        expected_columns.extend([f"{col}_{cat}" for cat in categories])
+    
+    # Agregar cualquier columna faltante con ceros
+    for col in expected_columns:
+        if col not in df_encoded_new.columns:
+            df_encoded_new[col] = 0
+    
+    # Asegurar el orden correcto de las columnas
+    df_encoded_new = df_encoded_new[expected_columns]
+    
+    # Mostrar en Streamlit
+    st.write("🔹 **Datos codificados correctamente:**")
+    st.write(df_encoded_new)
 
 
 

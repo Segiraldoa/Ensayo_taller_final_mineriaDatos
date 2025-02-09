@@ -36,7 +36,7 @@ def load_model_2():
         model2 = pickle.load(f)
     return model2
 
-model1 = load_model_1()
+model1=load_model_1()
 
 model2=load_model_2()
 

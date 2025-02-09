@@ -39,7 +39,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     st.write("🔹 **Datos originales:**")
     st.write(df)
     def load_onehot_encoder():
-        with open("onehot_encoder_1.pkl", "rb") as file:
+        with open("onehot_encoder_3.pkl", "rb") as file:
             onehot_encoder = pickle.load(file)
         return onehot_encoder
 

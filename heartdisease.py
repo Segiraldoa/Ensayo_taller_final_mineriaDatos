@@ -41,7 +41,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     st.write("🔹 **Datos originales:**")
     st.write(df_first_row)
     def load_encoder():
-        with open("onehot_encoder.pkl", "rb") as f:
+        with open("onehot_encoder_4.pkl", "rb") as f:
             encoder = pickle.load(f)
         with open("numerical_columns.pkl", "rb") as f:
             numerical_columns = pickle.load(f)

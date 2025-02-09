@@ -60,7 +60,7 @@ y_encoded = label_encoder.fit_transform(y)
 X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=42)
 
 df=X_test.copy()
-df_first_row = df.iloc[0, :-1].to_frame().T
+df_first_row = df.iloc[0, :-1].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
 st.write(df_first_row)
 
 
@@ -93,7 +93,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     
     # Concatenar las variables numéricas con las categóricas codificadas
     final_data = pd.concat([new_data_numerical, encoded_df], axis=1)        
-    prediction = model1.predict(final_data) 
+    prediction = model1.predict(df_first_row) 
     # prediction = model.predict(argmax(input_data)) # np.argmax(model_classic.predict(input_data))
     st.write("datos entrada:", final_data)       
     st.write("Predicción del modelo:", prediction)

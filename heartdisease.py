@@ -60,7 +60,7 @@ y_encoded = label_encoder.fit_transform(y)
 X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=42)
 
 df=X_test.copy()
-df_first_row = df.iloc[0, :-1].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
+df_first_row = df.iloc[0,:].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
 st.write(df_first_row)
 
 

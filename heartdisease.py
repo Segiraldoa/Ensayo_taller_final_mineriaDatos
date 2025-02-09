@@ -414,6 +414,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
 # Modelo de redes neuronales
 if st.sidebar.checkbox("Utilizar redes Neuronales"): 
     st.write("### Redes Neuronales")
+    st.write("ADADASD")
     
     st.write("""
     El modelo utilizado consiste en una red neuronal de una capa con 32 neuronas de entrada.

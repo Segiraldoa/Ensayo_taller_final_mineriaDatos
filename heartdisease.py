@@ -15,16 +15,66 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
+def load_encoder():
+        with open("onehot_encoder_5.pkl", "rb") as f:
+            encoder = pickle.load(f)
+        with open("numerical_columns_2.pkl", "rb") as f:
+            numerical_columns = pickle.load(f)
+        return encoder, numerical_columns
+
 def load_classic_model():
     filename = "model_trained_classifier.pkl.gz"
     with gzip.open(filename, "rb") as f:
         model = pickle.load(f)
     return model
 
+column_names = [
+            "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",
+            "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", "Weak Peripheral Pulse", "Lung rales",
+            "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", "Function Class", "Atypical", "Nonanginal",
+            "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", "Tinversion", "LVH", "Poor R Progression",
+            "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
+            "Region RWMA"
+        ]
+
 heartdisease = pd.read_csv('heartdisease.csv')
-df=heartdisease.copy()
-# df = df.iloc[:, :-1]
+
+
+zip_path = "best_model.pkl.gz"
+extract_path = "modelo_descomprimido"
+try:
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_path)
+    # st.success("Descompresión completada.")
+except zipfile.BadZipFile:
+    st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
+except zipfile.LargeZipFile:
+    st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
+except Exception as e:
+    st.error(f"Error durante la descompresión: {str(e)}")
+
+model_path = None
+for root, _, files in os.walk(extract_path):
+    for file in files:
+        if file.endswith(".h5"):
+            model_path = os.path.join(root, file)
+            break
+            
+if model_path:
+    # Cargar el modelo
+    model = tf.keras.models.load_model(model_path)
+    #st.success("Modelo cargado correctamente.")
+    X = heartdisease.iloc[:, :-1]
+    y = heartdisease['Cath']
+    X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
+    label_encoder = LabelEncoder()
+    y_encoded = label_encoder.fit_transform(y)
+    X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=42)
+
+df=X_test.copy()
 df_first_row = df.iloc[0, :-1].to_frame().T
+
+
 #Modelo Clasico
 if st.sidebar.checkbox("Utilizar arboles de decisión"): 
     st.write("### Arboles de decisión")
@@ -32,20 +82,13 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    # st.write(heartdisease.iloc[0][0])
-    # st.write(heartdisease.iloc[0].tolist()[0])
     
     model=load_classic_model()
         
     # Mostrar los datos originales
     st.write("🔹 **Datos originales:**")
     st.write(df_first_row)
-    def load_encoder():
-        with open("onehot_encoder_5.pkl", "rb") as f:
-            encoder = pickle.load(f)
-        with open("numerical_columns_2.pkl", "rb") as f:
-            numerical_columns = pickle.load(f)
-        return encoder, numerical_columns
+    
     
     encoder, numerical_columns = load_encoder()
     
@@ -188,7 +231,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", "Function Class", "Atypical", "Nonanginal",
             "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", "Tinversion", "LVH", "Poor R Progression",
             "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
-            "Region RWMA", "Cath"
+            "Region RWMA"
         ]
         
         # Variables categóricas y sus opciones
@@ -349,16 +392,6 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             label_encoder = LabelEncoder()
             y_encoded = label_encoder.fit_transform(y)
             X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
-
-        # Definir nombres de columnas
-        column_names = [
-            "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",
-            "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", "Weak Peripheral Pulse", "Lung rales",
-            "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", "Function Class", "Atypical", "Nonanginal",
-            "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", "Tinversion", "LVH", "Poor R Progression",
-            "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
-            "Region RWMA", "Cath"
-        ]
         
         # Variables categóricas y sus opciones
         categorical_columns = {

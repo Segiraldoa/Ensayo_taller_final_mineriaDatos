@@ -6,11 +6,20 @@ import seaborn as sns
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import gzip
+import pickle
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
+
+
+def load_classic_model():
+    filename = "model_trained_classifier.pkl.gz"
+    with gzip.open(filename, "rb") as f:
+        model = pickle.load(f)
+    return model
 
 heartdisease = pd.read_csv('heartdisease.csv')
 
@@ -277,11 +286,8 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-
-    filename = "model_trained_classifier.pkl.gz"
-    with gzip.open(filename, "rb") as f:
-        model = pickle.load(f)
-    return model_classic
+    
+    model_classic=load_classic_model()
 
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
@@ -311,7 +317,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             st.write("Datos de entrada:", input_data)
 
         # Realizar predicción
-        prediction = np.argmax(model.predict(input_data))
+        prediction = model_classic.predict(input_data) # np.argmax(model_classic.predict(input_data))
         # prediction = model.predict(argmax(input_data))
         st.write("Predicción del modelo:", prediction)
             

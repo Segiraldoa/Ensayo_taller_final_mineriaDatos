@@ -72,8 +72,6 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
     
-    model=load_classic_model()
-        
     # Mostrar los datos originales
     st.write("🔹 **Datos originales:**")
     st.write(df_first_row)
@@ -177,7 +175,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             st.write("Datos de entrada:", input_data)
 
         # Realizar predicción
-        prediction = model_classic.predict(input_data) # np.argmax(model_classic.predict(input_data))
+        prediction = model1.predict(input_data) # np.argmax(model_classic.predict(input_data))
         # prediction = model.predict(argmax(input_data))
         st.write("datos entrada:", input_data)
         

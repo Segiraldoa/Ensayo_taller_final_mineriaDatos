@@ -59,17 +59,19 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     # Separar las columnas categóricas
     categorical_columns = ["Sex","Weak Peripheral Pulse"]
     numerical_columns = [col for col in df.columns if col not in categorical_columns]
-    
+
+    st.write(type(encoder))  # Debe mostrar: <class 'sklearn.preprocessing._encoders.OneHotEncoder'>
+
     # Aplicar OneHotEncoder a las variables categóricas
-    encoded_array = encoder.transform(df[categorical_columns])
-    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(categorical_columns))
+    # encoded_array = encoder.transform(df[categorical_columns])
+    # encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(categorical_columns))
     
-    # Combinar los datos numéricos con los codificados
-    df_final = df[numerical_columns].reset_index(drop=True).join(encoded_df)
+    # # Combinar los datos numéricos con los codificados
+    # df_final = df[numerical_columns].reset_index(drop=True).join(encoded_df)
     
-    # Mostrar los datos listos para la predicción
-    st.write("🔹 **Datos transformados para el modelo:**")
-    st.write(df_final)
+    # # Mostrar los datos listos para la predicción
+    # st.write("🔹 **Datos transformados para el modelo:**")
+    # st.write(df_final)
     
     # # Realizar la predicción cuando el usuario haga clic en el botón
     # if st.button("🔮 Realizar Predicción"):

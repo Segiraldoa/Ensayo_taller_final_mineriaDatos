@@ -15,6 +15,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
+# def load_onehot_encoder():
+#     with open("onehot_encoder_columns.pkl", "rb") as file:
+#         onehot_encoder = pickle.load(file)
+#     return onehot_encoder
+
+# Función para cargar el OneHotEncoder guardado
+def load_onehot_encoder():
+    filename = "onehot_encoder_columns.pkl"
+    
+    # Cargar el archivo en modo lectura binaria
+    with open(filename, "rb") as file:
+        onehot_encoder = pickle.load(file)  # ✅ Carga correctamente el objeto
+    return onehot_encoder
+
+
 
 def load_classic_model():
     filename = "model_trained_classifier.pkl.gz"
@@ -23,6 +38,7 @@ def load_classic_model():
     return model
 
 heartdisease = pd.read_csv('heartdisease.csv')
+df=heartdisease.copy()
 #Modelo Clasico
 if st.sidebar.checkbox("Utilizar arboles de decisión"): 
     st.write("### Arboles de decisión")
@@ -30,9 +46,63 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    # st.write(heartdisease.iloc[0].tolist())
-    model_classic=load_classic_model()
+    st.write(heartdisease.iloc[0].tolist())
+    st.write(heartdisease.iloc[0].tolist())
+    
+    model=load_classic_model()
+    onehot_encoder = load_onehot_encoder()
 
+    st.write(df)
+    X_transformed = onehot_encoder.transform(df)
+    st.write(df)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
     zip_path = "modelo_entrenado_comprimido.zip"

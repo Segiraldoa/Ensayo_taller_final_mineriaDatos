@@ -23,7 +23,8 @@ def load_classic_model():
 
 heartdisease = pd.read_csv('heartdisease.csv')
 df=heartdisease.copy()
-df = df.iloc[:, :-1]
+# df = df.iloc[:, :-1]
+df_first_row = df.iloc[0, :-1].to_frame().T
 #Modelo Clasico
 if st.sidebar.checkbox("Utilizar arboles de decisión"): 
     st.write("### Arboles de decisión")
@@ -38,28 +39,33 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         
     # Mostrar los datos originales
     st.write("🔹 **Datos originales:**")
-    st.write(df)
-    def load_onehot_encoder():
-        with open("onehot_encoder_3.pkl", "rb") as file:
-            onehot_encoder = pickle.load(file)
-        return onehot_encoder
+    st.write(df_first_row)
+    def load_encoder():
+        with open("onehot_encoder.pkl", "rb") as f:
+            encoder = pickle.load(f)
+        with open("numerical_columns.pkl", "rb") as f:
+            numerical_columns = pickle.load(f)
+        return encoder, numerical_columns
+    
+    encoder, numerical_columns = load_encoder()
+    
+    # Simulación de datos nuevos
+    new_data = df_first_row
+    # Separar variables numéricas y categóricas
+    new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+    new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas
+    
+    # Codificar las variables categóricas
+    encoded_array = encoder.transform(new_data_categorical)
+    
+    # Convertir la salida a DataFrame con nombres de columnas codificadas
+    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
+    
+    # Concatenar las variables numéricas con las categóricas codificadas
+    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
+    
+    st.write("Datos listos para el modelo:", final_data)
 
-    # Cargar el encoder
-    encoder = load_onehot_encoder()
-    
-    # Verificar si el encoder se cargó correctamente
-    st.write(f"Tipo de encoder cargado: {type(encoder)}")  # Debe ser <class 'sklearn.preprocessing._encoders.OneHotEncoder'>
-    
-    # Simulación de datos de entrada    
-    df = pd.DataFrame(df)
-    
-    # Aplicar correctamente OneHotEncoder
-    encoded_array = encoder.transform(df)  # Ahora sí funcionará sin error
-    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(df.columns))
-    
-    # Mostrar los datos codificados en Streamlit
-    st.write("🔹 **Datos transformados con OneHotEncoder:**")
-    st.write(encoded_df)
 
 
 

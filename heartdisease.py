@@ -25,8 +25,6 @@ def load_encoder():
     return encoder, numerical_columns
 
 def load_model_1():
-    """Cargar el modelo y sus pesos desde el archivo model_weights.pkl."""
-    # nombre de la red neuronal
     filename = 'model_trained_classifier.pkl.gz'
     with gzip.open(filename, 'rb') as f:
         model1 = pickle.load(f)
@@ -45,34 +43,36 @@ model2=load_model_2()
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
     prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
+    st.write(model1.predict(df.iloc[n,:].to_frame().T))
     if prediction==1 and y_test[n]==1:
         st.write("Predicción del modelo:","Cath", prediction)
-        st.write("Clasificación real","Cath", y_test[n])
-        st.write("El modelo acertó")                    
+        st.write("Clasificación real:","Cath", y_test[n])
+        st.write("¡El modelo acertó!")                    
     if prediction==0 and y_test[n]==0:
         st.write("Predicción del modelo:","Normal", prediction)
-        st.write("Clasificación real","Normal", y_test[n])
-        st.write("El modelo acertó")
+        st.write("Clasificación real:","Normal", y_test[n])
+        st.write("¡El modelo acertó!")
     else:
         st.write("Predicción del modelo:", prediction)
         st.write("Clasificación real", y_test[n])
-        st.write("El modelo falló")
+        st.write("¡El modelo falló!")
         
 def datos_pordefecto2(data_model):
     n=int(data_model[-1])               
     prediction = np.argmax(model2.predict(df.iloc[n,:].to_frame().T))
+    st.write(model2.predict(df.iloc[n,:].to_frame().T))
     if prediction==1 and y_test[n]==1:
         st.write("Predicción del modelo:","Cath", prediction)
         st.write("Clasificación real","Cath", y_test[n])
-        st.write("El modelo acertó")                    
+        st.write("¡El modelo acertó!")                    
     if prediction==0 and y_test[n]==0:
         st.write("Predicción del modelo:","Normal", prediction)
         st.write("Clasificación real","Normal", y_test[n])
-        st.write("El modelo acertó")
+        st.write("¡El modelo acertó!")
     else:
         st.write("Predicción del modelo:", prediction)
         st.write("Clasificación real", y_test[n])
-        st.write("El modelo falló")
+        st.write("¡El modelo falló!")
 
 column_names = [
             "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", 

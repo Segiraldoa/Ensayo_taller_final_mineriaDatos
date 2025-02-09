@@ -189,8 +189,8 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         
         # Botón para generar la predicción
         if st.button("Realizar predicción"):
-            st.write("Procesando los datos para la predicción...")
-             # Mostrar los datos originales
+	            st.write("Procesando los datos para la predicción...")
+	             # Mostrar los datos originales
 		    st.write("🔹 **Datos originales:**")
 		    st.write(edited_df)
 		    

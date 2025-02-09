@@ -22,7 +22,8 @@ def load_classic_model():
     return model
 
 heartdisease = pd.read_csv('heartdisease.csv')
-df=heartdisease.copy()
+df=heartdisease.iloc[:, :-1].to_frame().T.copy()
+# df = df.iloc[:, :-1].to_frame().T
 #Modelo Clasico
 if st.sidebar.checkbox("Utilizar arboles de decisión"): 
     st.write("### Arboles de decisión")

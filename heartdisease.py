@@ -15,19 +15,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
-# def load_onehot_encoder():
-#     with open("onehot_encoder_columns.pkl", "rb") as file:
-#         onehot_encoder = pickle.load(file)
-#     return onehot_encoder
+def load_onehot_encoder():
+    with open("onehot_encoder_columns.pkl", "rb") as file:
+        onehot_encoder = pickle.load(file)
+    return onehot_encoder
 
 # Función para cargar el OneHotEncoder guardado
-def load_onehot_encoder():
-    filename = "onehot_encoder_columns.pkl"
+# def load_onehot_encoder():
+#     filename = "onehot_encoder_columns.pkl"
     
-    # Cargar el archivo en modo lectura binaria
-    with open(filename, "rb") as file:
-        onehot_encoder = pickle.load(file)  # ✅ Carga correctamente el objeto
-    return onehot_encoder
+#     # Cargar el archivo en modo lectura binaria
+#     with open(filename, "rb") as file:
+#         onehot_encoder = pickle.load(file)  # ✅ Carga correctamente el objeto
+#     return onehot_encoder
 
 
 
@@ -46,17 +46,35 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    st.write(heartdisease.iloc[0].tolist())
-    st.write(heartdisease.iloc[0].tolist())
+    # st.write(heartdisease.iloc[0].tolist())
+    # st.write(heartdisease.iloc[0].tolist())
     
     model=load_classic_model()
-    onehot_encoder = load_onehot_encoder()
-
+    encoder = load_onehot_encoder()
+        
+    # Mostrar los datos originales
+    st.write("🔹 **Datos originales:**")
     st.write(df)
-    X_transformed = onehot_encoder.transform(df)
-    st.write(df)
-
-
+    
+    # Separar las columnas categóricas
+    categorical_columns = ["Sex","Weak Peripheral Pulse"]
+    numerical_columns = [col for col in df.columns if col not in categorical_columns]
+    
+    # Aplicar OneHotEncoder a las variables categóricas
+    encoded_array = encoder.transform(df[categorical_columns])
+    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(categorical_columns))
+    
+    # Combinar los datos numéricos con los codificados
+    df_final = df[numerical_columns].reset_index(drop=True).join(encoded_df)
+    
+    # Mostrar los datos listos para la predicción
+    st.write("🔹 **Datos transformados para el modelo:**")
+    st.write(df_final)
+    
+    # # Realizar la predicción cuando el usuario haga clic en el botón
+    # if st.button("🔮 Realizar Predicción"):
+    #     prediction = model.predict(df_final)  # Hacer la predicción
+    #     st.success(f"✅ **Predicción del modelo:** {prediction[0]}")
 
 
 

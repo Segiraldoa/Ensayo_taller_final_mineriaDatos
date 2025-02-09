@@ -95,6 +95,8 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         # Realizar predicción
         prediction = model_classic.predict(input_data) # np.argmax(model_classic.predict(input_data))
         # prediction = model.predict(argmax(input_data))
+        st.write("datos entrada:", input_data)
+        
         st.write("Predicción del modelo:", prediction)
             
     if selected_column=='Manual':

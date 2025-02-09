@@ -108,7 +108,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_s
 df_defecto=X_test.copy()
 
 df=X_test.copy()
-df_first_row = df.iloc[0,:].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
+# df_first_row = df.iloc[0,:].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
 
 
 
@@ -202,7 +202,6 @@ if st.sidebar.checkbox("Mostrar primeras filas"):
 
 
 # Mostrar información del dataset
-import io
 if st.sidebar.checkbox("Mostrar información del dataset"):
     st.write("### Información del dataset")
 

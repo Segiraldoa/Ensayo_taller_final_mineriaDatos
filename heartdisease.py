@@ -22,11 +22,20 @@ def load_encoder():
             numerical_columns = pickle.load(f)
         return encoder, numerical_columns
 
-def load_classic_model():
-    filename = "model_trained_classifier.pkl.gz"
-    with gzip.open(filename, "rb") as f:
-        model = pickle.load(f)
-    return model
+def load_model():
+    """Cargar el modelo y sus pesos desde el archivo model_weights.pkl."""
+
+    # nombre de la red neuronal
+    filename = 'model_trained_classifier.pkl.gz'
+    with gzip.open(filename, 'rb') as f:
+        model1 = pickle.load(f)
+
+    filename = 'best_model.pkl.gz'
+    with gzip.open(filename, 'rb') as f:
+        model2 = pickle.load(f)
+    return model1, model2
+
+model1, model2 = load_model()
 
 column_names = [
             "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",
@@ -38,45 +47,22 @@ column_names = [
         ]
 
 heartdisease = pd.read_csv('heartdisease.csv')
-
-
-zip_path = "best_model.pkl.gz"
-extract_path = "modelo_descomprimido"
-try:
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_path)
-    # st.success("Descompresión completada.")
-except zipfile.BadZipFile:
-    st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
-except zipfile.LargeZipFile:
-    st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
-except Exception as e:
-    st.error(f"Error durante la descompresión: {str(e)}")
-
-model_path = None
-for root, _, files in os.walk(extract_path):
-    for file in files:
-        if file.endswith(".h5"):
-            model_path = os.path.join(root, file)
-            break
             
-if model_path:
-    # Cargar el modelo
-    model = tf.keras.models.load_model(model_path)
-    #st.success("Modelo cargado correctamente.")
-    X = heartdisease.iloc[:, :-1]
-    y = heartdisease['Cath']
-    X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-    label_encoder = LabelEncoder()
-    y_encoded = label_encoder.fit_transform(y)
-    X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=42)
+#st.success("Modelo cargado correctamente.")
+X = heartdisease.iloc[:, :-1]
+y = heartdisease['Cath']
+X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
+label_encoder = LabelEncoder()
+y_encoded = label_encoder.fit_transform(y)
+X_train, X_test, y_train, y_test = train_test_split(X_encoded, y_encoded, test_size=0.2, random_state=42)
 
 df=X_test.copy()
 df_first_row = df.iloc[0, :-1].to_frame().T
+st.write(df_first_row)
 
 
 #Modelo Clasico
-if st.sidebar.checkbox("Utilizar arboles de decisión"): 
+if st.sidebar.checkbox("Utilizar arboles de decisión"):
     st.write("### Arboles de decisión")
     st.write("""
     El modelo utilizado consiste en un arbol con una profundidad de 3.
@@ -108,6 +94,8 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
     
     st.write("Datos listos para el modelo:", final_data)
+
+
 
 
 

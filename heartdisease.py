@@ -43,9 +43,10 @@ model2=load_model_2()
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
     prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
+    st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
     if prediction==1 and y_test[n]==1:
-        st.write("Predicción del modelo:","Cath", prediction)
+        st.write("Predicción del modelo:","Cath", np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))
         st.write("Clasificación real:","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
     if prediction==0 and y_test[n]==0:

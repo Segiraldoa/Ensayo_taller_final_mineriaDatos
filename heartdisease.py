@@ -36,7 +36,9 @@ def load_model_2():
         model2 = pickle.load(f)
     return model2
 
-model1, model2 = load_model_1(),load_model_2()
+model1 = load_model_1()
+
+model2=load_model_2()
 
 column_names = [
             "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",

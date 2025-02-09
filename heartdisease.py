@@ -39,7 +39,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
     st.write(heartdisease.iloc[0])
-    # st.write(heartdisease.iloc[0].tolist())
+    st.write(heartdisease.iloc[0].tolist()[0])
     
     model=load_classic_model()
     encoder = load_onehot_encoder()

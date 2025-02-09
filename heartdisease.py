@@ -22,20 +22,21 @@ def load_encoder():
             numerical_columns = pickle.load(f)
         return encoder, numerical_columns
 
-def load_model():
+def load_model_1():
     """Cargar el modelo y sus pesos desde el archivo model_weights.pkl."""
-
     # nombre de la red neuronal
     filename = 'model_trained_classifier.pkl.gz'
     with gzip.open(filename, 'rb') as f:
         model1 = pickle.load(f)
+    return model1
 
+def load_model_2():
     filename = 'best_model.pkl.gz'
     with gzip.open(filename, 'rb') as f:
         model2 = pickle.load(f)
-    return model1, model2
+    return model2
 
-model1, model2 = load_model()
+model1, model2 = load_model_1(),load_model_2()
 
 column_names = [
             "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", "EX-Smoker", "FH", "Obesity", "CRF", "CVA",

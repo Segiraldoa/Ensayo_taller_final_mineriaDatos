@@ -72,27 +72,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
     
-    # Mostrar los datos originales
-    st.write("🔹 **Datos originales:**")
-    st.write(df_first_row)
-    
-    
-    encoder, numerical_columns = load_encoder()
-    
-    # Simulación de datos nuevos
-    new_data = df_first_row
-    # Separar variables numéricas y categóricas
-    new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
-    new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas
-    
-    # Codificar las variables categóricas
-    encoded_array = encoder.transform(new_data_categorical)
-    
-    # Convertir la salida a DataFrame con nombres de columnas codificadas
-    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
-    
-    # Concatenar las variables numéricas con las categóricas codificadas
-    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)        
+           
     prediction = model1.predict(df_first_row) 
     # prediction = model.predict(argmax(input_data)) # np.argmax(model_classic.predict(input_data))
     st.write("datos entrada:", final_data)       
@@ -254,6 +234,31 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
 if st.sidebar.checkbox("Utilizar redes Neuronales"): 
     st.write("### Redes Neuronales")
     st.write("ADADASD")
+
+        ###############################################################
+     # Mostrar los datos originales
+    st.write("🔹 **Datos originales:**")
+    st.write(df_first_row)
+    
+    
+    encoder, numerical_columns = load_encoder()
+    
+    # Simulación de datos nuevos
+    new_data = df_first_row
+    # Separar variables numéricas y categóricas
+    new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+    new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas
+    
+    # Codificar las variables categóricas
+    encoded_array = encoder.transform(new_data_categorical)
+    
+    # Convertir la salida a DataFrame con nombres de columnas codificadas
+    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
+    
+    # Concatenar las variables numéricas con las categóricas codificadas
+    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
+
+        ###################################################################
     
     st.write("""
     El modelo utilizado consiste en una red neuronal de una capa con 32 neuronas de entrada.

@@ -166,43 +166,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 st.write("Clasificación real", y_test[n])
                 st.write("El modelo falló")
             
-    if selected_column=='Manual':        
-        # Variables categóricas y sus opciones
-        categorical_columns = {
-            "Sex": ["Male", "Female"],
-            "DM": [0,1],
-            "HTN":[0,1],
-            "Current Smoker": [0, 1],
-            "EX-Smoker": [0, 1],
-            "FH": [0, 1],
-            "Obesity": ["Y", "N"],
-            "CRF": ["Y", "N"],
-            "CVA": ["Y", "N"],
-            "Airway disease": ["Y", "N"],
-            "Thyroid Disease": ["Y", "N"],
-            "CHF": ["Y", "N"],
-            "Edema": [0,1],
-            "Weak Peripheral Pulse": ["Y","N"]
-            "Lung rales": ["Y","N"]
-            "Systolic Murmur": ["Y","N"]
-            "Diastolic Murmur": ["Y","N"]
-            "Typical Chest Pain": [0,1]
-            "Dyspnea": ["Y","N"]
-            "Function Class": [0,1,2,3]
-            "Atypical": ["Y","N"]
-            "Nonanginal": ["Y","N"]
-            "LowTH Ang": ["Y","N"],
-            "Q Wave": [0,1],
-            "St Elevation": [0,1],
-            "St Depression": [0, 1],
-            "Tinversion": [0, 1], 
-            "LVH": ["Y", "N"], 
-            "Poor R Progression": ["Y", "N"], 
-            "BBB": ["LBBB", "N","RBBB"], 
-            "Region RWMA": [0,1,2,3,4]
-            "VHD": ["mild","Moderate","N","Severe"]
-        }
-        
+    if selected_column=='Manual':             
         # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
         data = {col: [0.0] for col in column_names}  # Inicializar numéricos en 0
         for col in categorical_columns:
@@ -225,16 +189,32 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         # Botón para generar la predicción
         if st.button("Realizar predicción"):
             st.write("Procesando los datos para la predicción...")
-            # Convertir DataFrame a numpy para pasarlo al modelo
-            input_data = edited_df.to_numpy()
-        
-            # Aquí iría la llamada al modelo de predicción (simulación)
-            prediction = np.random.rand()  # Simulación de predicción
-        
-            st.write("### Predicción realizada:")
-            st.write(prediction)
+             # Mostrar los datos originales
+		    st.write("🔹 **Datos originales:**")
+		    st.write(edited_df)
+		    
+		    encoder, numerical_columns = load_encoder()
+		    
+		    # Simulación de datos nuevos
+		    new_data = edited_df
+		    # Separar variables numéricas y categóricas
+		    new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+		    new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas
+		    
+		    # Codificar las variables categóricas
+		    encoded_array = encoder.transform(new_data_categorical)
+		    
+		    # Convertir la salida a DataFrame con nombres de columnas codificadas
+		    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
+		    
+		    # Concatenar las variables numéricas con las categóricas codificadas
+		    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
 
-    
+			prediction=model1.predict(final_data)
+			if prediction==1:
+	            st.write("Predicción del modelo:","Cath", prediction)
+			else:
+				st.write("Predicción del modelo:","Normal", prediction)
     
 # Modelo de redes neuronales
 if st.sidebar.checkbox("Utilizar redes Neuronales"): 
@@ -242,72 +222,12 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     st.write("ADADASD")
 
         ###############################################################
-     # Mostrar los datos originales
-    st.write("🔹 **Datos originales:**")
-    st.write(df_first_row)
-    
-    
-    encoder, numerical_columns = load_encoder()
-    
-    # Simulación de datos nuevos
-    new_data = df_first_row
-    # Separar variables numéricas y categóricas
-    new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
-    new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas
-    
-    # Codificar las variables categóricas
-    encoded_array = encoder.transform(new_data_categorical)
-    
-    # Convertir la salida a DataFrame con nombres de columnas codificadas
-    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
-    
-    # Concatenar las variables numéricas con las categóricas codificadas
-    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-
         ###################################################################
     
     st.write("""
     El modelo utilizado consiste en una red neuronal de una capa con 32 neuronas de entrada.
     La base de datos fue codificada con One Hot Encoder y estandarizada con StandardScaler.
     """)
-
-    # Extracción del 
-    zip_path = "modelo_entrenado_comprimido.zip"
-    extract_path = "modelo_descomprimido"
-    try:
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_path)
-        # st.success("Descompresión completada.")
-    except zipfile.BadZipFile:
-        st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
-    except zipfile.LargeZipFile:
-        st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
-    except Exception as e:
-        st.error(f"Error durante la descompresión: {str(e)}")
-
-    st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
-    selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
-    if selected_column=='Por defecto':
-        # Buscar el archivo del modelo dentro de la carpeta extraída
-        model_path = None
-        for root, _, files in os.walk(extract_path):
-            for file in files:
-                if file.endswith(".h5"):
-                    model_path = os.path.join(root, file)
-                    break
-                    
-        if model_path:
-            # Cargar el modelo
-            model = tf.keras.models.load_model(model_path)
-            #st.success("Modelo cargado correctamente.")
-            X = heartdisease.iloc[:, :-1]
-            y = heartdisease['Cath']
-            X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X_encoded)
-            label_encoder = LabelEncoder()
-            y_encoded = label_encoder.fit_transform(y)
-            X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
 
             st.write("### Indique los datos por defecto que desea uasr para la predicción")
             data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'])
@@ -342,45 +262,6 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             
     if selected_column=='Manual':
         # Buscar el archivo del modelo dentro de la carpeta extraída
-        model_path = None
-        for root, _, files in os.walk(extract_path):
-            for file in files:
-                if file.endswith(".h5"):
-                    model_path = os.path.join(root, file)
-                    break
-                    
-        if model_path:
-            # Cargar el modelo
-            model = tf.keras.models.load_model(model_path)
-            #st.success("Modelo cargado correctamente.")
-            X = heartdisease.iloc[:, :-1]
-            y = heartdisease['Cath']
-            X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X_encoded)
-            label_encoder = LabelEncoder()
-            y_encoded = label_encoder.fit_transform(y)
-            X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
-        
-        # Variables categóricas y sus opciones
-        categorical_columns = {
-            "Sex": ["Male", "Female"],
-            "DM": [0,1],
-            "HTN":[0,1],
-            "Current Smoker": [0, 1],
-            "EX-Smoker": [0, 1],
-            "FH": [0, 1],
-            "Obesity": ["Y", "N"],
-            "CRF": ["Y", "N"],
-            "CVA": ["Y", "N"],
-            "Airway disease": ["Y", "N"],
-            "Thyroid Disease": ["Y", "N"],
-            "CHF": ["Y", "N"],
-            "Edema": [0,1],
-            
-            "Region RWMA": ["Normal", "Abnormal"],  
-            "Cath": ["Normal", "Disease"]  
-        }
         
         # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
         data = {col: [0.0] for col in column_names}  # Inicializar numéricos en 0

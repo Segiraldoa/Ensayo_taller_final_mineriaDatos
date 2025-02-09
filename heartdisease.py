@@ -19,10 +19,10 @@ def load_encoder():
 	with open("onehot_encoder_5.pkl", "rb") as f:
         	encoder = pickle.load(f)
 	
-	with open("numerical_columns_2.pkl", "rb") as f:
+												with open("numerical_columns_2.pkl", "rb") as f:
         	numerical_columns = pickle.load(f)
 	
-    return encoder, numerical_columns
+    	return encoder, numerical_columns
 
 def load_model_1():
     """Cargar el modelo y sus pesos desde el archivo model_weights.pkl."""

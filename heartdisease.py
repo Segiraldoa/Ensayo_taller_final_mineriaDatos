@@ -15,14 +15,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
-def load_onehot_encoder():
-    with open("onehot_encoder_columns.pkl", "rb") as file:
-        onehot_encoder = pickle.load(file)
-    return onehot_encoder
-
-
-
-
 def load_classic_model():
     filename = "model_trained_classifier.pkl.gz"
     with gzip.open(filename, "rb") as f:
@@ -38,16 +30,35 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    st.write(heartdisease.iloc[0][0])
-    st.write(heartdisease.iloc[0].tolist()[0])
+    # st.write(heartdisease.iloc[0][0])
+    # st.write(heartdisease.iloc[0].tolist()[0])
     
     model=load_classic_model()
-    encoder = load_onehot_encoder()
         
     # Mostrar los datos originales
     st.write("🔹 **Datos originales:**")
     st.write(df)
+    def load_onehot_encoder():
+        with open("onehot_encoder_1.pkl", "rb") as file:
+            onehot_encoder = pickle.load(file)
+        return onehot_encoder
 
+    # Cargar el encoder
+    encoder = load_onehot_encoder()
+    
+    # Verificar si el encoder se cargó correctamente
+    st.write(f"Tipo de encoder cargado: {type(encoder)}")  # Debe ser <class 'sklearn.preprocessing._encoders.OneHotEncoder'>
+    
+    # Simulación de datos de entrada    
+    df = pd.DataFrame(df)
+    
+    # Aplicar correctamente OneHotEncoder
+    encoded_array = encoder.transform(df)  # Ahora sí funcionará sin error
+    encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out(df.columns))
+    
+    # Mostrar los datos codificados en Streamlit
+    st.write("🔹 **Datos transformados con OneHotEncoder:**")
+    st.write(encoded_df)
 
 
 

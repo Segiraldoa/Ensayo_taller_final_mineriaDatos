@@ -38,7 +38,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    st.write(heartdisease.iloc[0].tolist())
+    st.write(heartdisease.iloc[0])
     # st.write(heartdisease.iloc[0].tolist())
     
     model=load_classic_model()
@@ -48,31 +48,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     st.write("🔹 **Datos originales:**")
     st.write(df)
 
-    def load_categories():
-        with open("categories.pkl", "rb") as file:
-            return pickle.load(file)  # Devuelve las categorías únicas por columna
-    
-    categories_dict = load_categories()
-    
-    # Aplicar One-Hot Encoding usando solo categorías de entrenamiento
-    df_encoded_new = pd.get_dummies(df.iloc[0].tolist())
-    
-    # Verificar que todas las columnas del entrenamiento están en los datos nuevos
-    expected_columns = []
-    for col, categories in categories_dict.items():
-        expected_columns.extend([f"{col}_{cat}" for cat in categories])
-    
-    # Agregar cualquier columna faltante con ceros
-    for col in expected_columns:
-        if col not in df_encoded_new.columns:
-            df_encoded_new[col] = 0
-    
-    # Asegurar el orden correcto de las columnas
-    df_encoded_new = df_encoded_new[expected_columns]
-    
-    # Mostrar en Streamlit
-    st.write("🔹 **Datos codificados correctamente:**")
-    st.write(df_encoded_new)
+
 
 
 

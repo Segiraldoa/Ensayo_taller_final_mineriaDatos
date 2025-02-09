@@ -428,7 +428,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
 
         if data_model=='Datos 2':
             n=1
-            prediction = model1.predict(df.iloc[n,:].to_frame().T)
+            prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
             if prediction==1 and y_test[n]==1:
                 st.write("Predicción del modelo:","Cath", prediction)
                 st.write("Clasificación real","Cath", y_test[n])
@@ -443,7 +443,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 st.write("El modelo falló2")
         if data_model=='Datos 3':
             n=2
-            prediction = model1.predict(df.iloc[n,:].to_frame().T)
+            prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
             if prediction==1 and y_test[n]==1:
                 st.write("Predicción del modelo:","Cath", prediction)
                 st.write("Clasificación real","Cath", y_test[n])
@@ -458,7 +458,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 st.write("El modelo falló3")
         if data_model=='Datos 4':
             n=3
-            prediction = model1.predict(df.iloc[n,:].to_frame().T)
+            prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
             if prediction==1 and y_test[n]==1:
                 st.write("Predicción del modelo:","Cath", prediction)
                 st.write("Clasificación real","Cath", y_test[n])
@@ -473,7 +473,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 st.write("El modelo falló4")
         if data_model=='Datos 5':
             n=4
-            prediction = model1.predict(df.iloc[n,:].to_frame().T)
+            prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
             if prediction==1 and y_test[n]==1:
                 st.write("Predicción del modelo:","Cath", prediction)
                 st.write("Clasificación real","Cath", y_test[n])

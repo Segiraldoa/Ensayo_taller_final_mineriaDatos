@@ -55,7 +55,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     categories_dict = load_categories()
     
     # Aplicar One-Hot Encoding usando solo categorías de entrenamiento
-    df_encoded_new = pd.get_dummies(df.iloc[0])
+    df_encoded_new = pd.get_dummies(df.iloc[0].tolist())
     
     # Verificar que todas las columnas del entrenamiento están en los datos nuevos
     expected_columns = []

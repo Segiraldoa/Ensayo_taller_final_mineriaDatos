@@ -25,6 +25,15 @@ def load_model_1():
         model1 = pickle.load(f)
     return model1
 
+def load_encoder():
+	with open("onehot_encoder_5.pkl", "rb") as f:
+        	encoder = pickle.load(f)
+	
+	with open("numerical_columns_2.pkl", "rb") as f:
+        	numerical_columns = pickle.load(f)
+	
+    	return encoder, numerical_columns
+
 def load_model_2():
     filename = 'best_model.pkl.gz'
     with gzip.open(filename, 'rb') as f:

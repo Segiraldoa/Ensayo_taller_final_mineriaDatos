@@ -94,11 +94,12 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
     
     # Concatenar las variables numéricas con las categóricas codificadas
-    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-    
-    st.write("Datos listos para el modelo:", final_data)
-
-
+    final_data = pd.concat([new_data_numerical, encoded_df], axis=1)        
+    prediction = model1.predict(final_data) 
+    # prediction = model.predict(argmax(input_data)) # np.argmax(model_classic.predict(input_data))
+    st.write("datos entrada:", final_data)       
+    st.write("Predicción del modelo:", prediction)
+        
 
 
 
@@ -149,39 +150,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'])
-    zip_path = "modelo_entrenado_comprimido.zip"
-    extract_path = "modelo_descomprimido"
-    try:
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_path)
-        # st.success("Descompresión completada.")
-    except zipfile.BadZipFile:
-        st.error("Error: El archivo ZIP está corrupto o no es un archivo ZIP válido.")
-    except zipfile.LargeZipFile:
-        st.error("Error: El archivo ZIP es demasiado grande y requiere compatibilidad con ZIP64.")
-    except Exception as e:
-        st.error(f"Error durante la descompresión: {str(e)}")
 
-    model_path = None
-    for root, _, files in os.walk(extract_path):
-        for file in files:
-            if file.endswith(".h5"):
-                model_path = os.path.join(root, file)
-                break
-                
-    if model_path:
-        # Cargar el modelo
-        model = tf.keras.models.load_model(model_path)
-        #st.success("Modelo cargado correctamente.")
-        X = heartdisease.iloc[:, :-1]
-        y = heartdisease['Cath']
-        X_encoded = pd.get_dummies(X, drop_first=True,dtype= int)
-        scaler = StandardScaler()
-        X_scaled = scaler.fit_transform(X_encoded)
-        label_encoder = LabelEncoder()
-        y_encoded = label_encoder.fit_transform(y)
-        X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.2, random_state=42)
-   
     if selected_column=='Por defecto':
         # Buscar el archivo del modelo dentro de la carpeta extraída
         st.write("### Indique los datos por defecto que desea uasr para la predicción")

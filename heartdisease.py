@@ -430,7 +430,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     if selected_column=='Por defecto':
         # Buscar el archivo del modelo dentro de la carpeta extraída
         st.write("### Indique los datos por defecto que desea uasr para la predicción")
-        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'],key="modelo1_eleccion_datos")
+        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo1_eleccion_datos")
         datos_pordefecto1(data_model)
         
     if selected_column=='Manual':             
@@ -482,8 +482,9 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'],key="modelo2_metodo_prediccion")
     if selected_column=='Por defecto':             
         st.write("### Indique los datos por defecto que desea uasr para la predicción")
-        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'],key="modelo2_eleccion_datos")
+        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo2_eleccion_datos")
         datos_pordefecto2(data_model)        
+        
     if selected_column=='Manual':
         # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
         data = {col: [0.0] for col in column_names}  # Inicializar numéricos en 0

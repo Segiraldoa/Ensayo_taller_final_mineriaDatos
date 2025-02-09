@@ -24,7 +24,7 @@ def load_encoder():
 
 def load_model_1():
     """Cargar el modelo y sus pesos desde el archivo model_weights.pkl."""
-    # nombre de la red neuronal
+    # nombre de la red neuronalv
     filename = 'model_trained_classifier.pkl.gz'
     with gzip.open(filename, 'rb') as f:
         model1 = pickle.load(f)

@@ -30,6 +30,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
+    st.write(heartdisease[0])
     model_classic=load_classic_model()
 
     st.write("### Indique si desea hacer una predicción de manera manual o usar datos por defecto")
@@ -73,15 +74,15 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5'])
 
         if data_model=='Datos 1':
-            input_data = heartdisease[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            input_data = X_train[0].reshape(1, -1)  # Excluir la última columna si es la etiqueta
             st.write("Datos de entrada:", input_data)
 
         if data_model=='Datos 2':
-            input_data = heartdisease[1].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            input_data = X_train[1].reshape(1, -1)  # Excluir la última columna si es la etiqueta
             st.write("Datos de entrada:", input_data)
 
         if data_model=='Datos 3':
-            input_data = heartdisease[2].reshape(1, -1)  # Excluir la última columna si es la etiqueta
+            input_data = X_train[2].reshape(1, -1)  # Excluir la última columna si es la etiqueta
             st.write("Datos de entrada:", input_data)
 
         if data_model=='Datos 4':

@@ -38,7 +38,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     El modelo utilizado consiste en un arbol con una profundidad de 3.
     La base de datos fue codificada con One Hot Encoder y los datos no fueron escalados.
     """)
-    st.write(heartdisease.iloc[0])
+    st.write(heartdisease.iloc[0][0])
     st.write(heartdisease.iloc[0].tolist()[0])
     
     model=load_classic_model()

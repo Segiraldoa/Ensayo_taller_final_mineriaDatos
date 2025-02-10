@@ -315,7 +315,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 input_data[col] = input_value
         
         st.write("### Datos ingresados")
-        st.json(input_data)
+        # st.json(input_data)
 
 
 
@@ -340,29 +340,30 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         # # Mostrar la tabla actualizada
         # st.write("#### Datos ingresados:")
         # st.write(edited_df)
-        # # Botón para generar la predicción
-        # if st.button("Realizar predicción"):
-        #     st.write("Procesando los datos para la predicción...")
-        #     # Mostrar los datos originales
-        #     st.write(" **Datos originales:**")
-        #     st.write(edited_df)
-        #     encoder, numerical_columns = load_encoder()
-        #     # Simulación de datos nuevos
-        #     new_data = edited_df
-        #     # Separar variables numéricas y categóricas
-        #     new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
-        #     new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
-        #     # Codificar las variables categóricas
-        #     encoded_array = encoder.transform(new_data_categorical)            
-        #     # Convertir la salida a DataFrame con nombres de columnas codificadas
-        #     encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
-        #     # Concatenar las variables numéricas con las categóricas codificadas
-        #     final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
-        #     prediction=model1.predict(final_data)
-        #     if prediction==1:
-        #         st.write("Predicción del modelo:","Cath", prediction)
-        #     else:
-        #         st.write("Predicción del modelo:","Normal", prediction)
+        # Botón para generar la predicción
+
+        if st.button("Realizar predicción"):
+            st.write("Procesando los datos para la predicción...")
+            # Mostrar los datos originales
+            st.write(" **Datos originales:**")
+            st.write(input_data)
+            encoder, numerical_columns = load_encoder()
+            # Simulación de datos nuevos
+            new_data = input_data   
+            # Separar variables numéricas y categóricas
+            new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+            new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
+            # Codificar las variables categóricas
+            encoded_array = encoder.transform(new_data_categorical)            
+            # Convertir la salida a DataFrame con nombres de columnas codificadas
+            encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
+            # Concatenar las variables numéricas con las categóricas codificadas
+            final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
+            prediction=model1.predict(final_data)
+            if prediction==1:
+                st.write("Predicción del modelo:","Cath", prediction)
+            else:
+                st.write("Predicción del modelo:","Normal", prediction)
 
 # Modelo de redes neuronales
 if st.sidebar.checkbox("Utilizar redes Neuronales"): 

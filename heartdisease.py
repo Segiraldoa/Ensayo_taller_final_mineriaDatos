@@ -376,8 +376,13 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             encoder, numerical_columns = load_encoder()
             # Simulación de datos nuevos
             new_data = input_array   
+            if not isinstance(new_data, pd.DataFrame):
+                new_data = pd.DataFrame([new_data], columns=column_names)
+            
+            # Seleccionar solo las variables categóricas
+            new_data_categorical = new_data.loc[:, encoder.feature_names_in_]
             # Separar variables numéricas y categóricas
-            new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+            # new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
             new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
             # Codificar las variables categóricas
             encoded_array = encoder.transform(new_data_categorical)            

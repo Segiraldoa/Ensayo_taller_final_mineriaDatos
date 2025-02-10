@@ -42,38 +42,38 @@ model2=load_model_2()
 
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
-    prediction = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
+    prediction1 = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
     st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T)+1)
     
-    if prediction==1 and y_test[n]==1:
+    if prediction1==1 and y_test[n]==1:
         st.write("Predicción del modelo:","Cath", np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))
         st.write("Clasificación real:","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
-    if prediction==0 and y_test[n]==0:
-        st.write("Predicción del modelo:","Normal", prediction)
+    if prediction1==0 and y_test[n]==0:
+        st.write("Predicción del modelo:","Normal", prediction1)
         st.write("Clasificación real:","Normal", y_test[n])
         st.write("¡El modelo acertó!")
     else:
-        st.write("Predicción del modelo:", prediction)
+        st.write("Predicción del modelo:", prediction1)
         st.write("Clasificación real", y_test[n])
         st.write("¡El modelo falló!")
         
 def datos_pordefecto2(data_model):
     n=int(data_model[-1])               
-    prediction = np.argmax(model2.predict(df.iloc[n,:].to_frame().T))
+    prediction2 = np.argmax(model2.predict(df.iloc[n,:].to_frame().T))
     st.write(n)
     st.write(model2.predict(df.iloc[n,:].to_frame().T))
-    if prediction==1 and y_test[n]==1:
-        st.write("Predicción del modelo:","Cath", prediction)
+    if prediction2==1 and y_test[n]==1:
+        st.write("Predicción del modelo:","Cath", prediction2)
         st.write("Clasificación real","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
-    if prediction==0 and y_test[n]==0:
-        st.write("Predicción del modelo:","Normal", prediction)
+    if prediction2==0 and y_test[n]==0:
+        st.write("Predicción del modelo:","Normal", prediction2)
         st.write("Clasificación real","Normal", y_test[n])
         st.write("¡El modelo acertó!")
     else:
-        st.write("Predicción del modelo:", prediction)
+        st.write("Predicción del modelo:", prediction2)
         st.write("Clasificación real", y_test[n])
         st.write("¡El modelo falló!")
 
@@ -432,8 +432,8 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     if selected_column=='Por defecto':
         # Buscar el archivo del modelo dentro de la carpeta extraída
         st.write("### Indique los datos por defecto que desea uasr para la predicción")
-        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo1_eleccion_datos")
-        datos_pordefecto1(data_model)
+        data_model1 = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo1_eleccion_datos")
+        datos_pordefecto1(data_model1)
         
     if selected_column=='Manual':             
         # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
@@ -484,8 +484,8 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
     selected_column = st.selectbox("Selecciona un método para la predicción", ['Por defecto','Manual'],key="modelo2_metodo_prediccion")
     if selected_column=='Por defecto':             
         st.write("### Indique los datos por defecto que desea uasr para la predicción")
-        data_model = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo2_eleccion_datos")
-        datos_pordefecto2(data_model)        
+        data_model2 = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo2_eleccion_datos")
+        datos_pordefecto2(data_model2)        
         
     if selected_column=='Manual':
         # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista

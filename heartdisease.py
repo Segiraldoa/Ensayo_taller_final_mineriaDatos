@@ -87,17 +87,18 @@ column_names = [
             "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", 
     "Tinversion", "LVH", "Poor R Progression",
             "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", 
-    "WBC", "Lymph", "Neut", "PLT", "EF-TTE",
+    "WBC", "Lymph", "Neut", "PLT", "EF-TTE", "VHD",
             "Region RWMA"
         ]
 categorical_columns = {
-            "Sex": ["Male", "Female"],"DM": [0,1],"HTN":[0,1],"Current Smoker": [0, 1],"EX-Smoker": [0, 1],"FH": [0, 1],"Obesity": ["Y", "N"],
+            "Sex": ["Male", "Female"], "DM": [0,1], "HTN": [0,1], "Current Smoker": [0, 1],"EX-Smoker": [0, 1],"FH": [0, 1],"Obesity": ["Y", "N"],
             "CRF": ["Y", "N"],"CVA": ["Y", "N"],"Airway disease": ["Y", "N"],"Thyroid Disease": ["Y", "N"],"CHF": ["Y", "N"],"Edema": [0,1],
             "Weak Peripheral Pulse": ["Y","N"],"Lung rales": ["Y","N"],"Systolic Murmur": ["Y","N"],"Diastolic Murmur": ["Y","N"],"Typical Chest Pain": [0,1],
             "Dyspnea": ["Y","N"],"Function Class": [0,1,2,3],"Atypical": ["Y","N"],"Nonanginal": ["Y","N"],"LowTH Ang": ["Y","N"],"Q Wave": [0,1],
             "St Elevation": [0,1],"St Depression": [0, 1],"Tinversion": [0, 1],"LVH": ["Y", "N"],"Poor R Progression": ["Y", "N"],"BBB": ["LBBB", "N","RBBB"], 
             "Region RWMA": [0,1,2,3,4],"VHD": ["mild","Moderate","N","Severe"]
         }
+
 
 heartdisease = pd.read_csv('heartdisease.csv')
 
@@ -249,26 +250,26 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
     
     ####################################################################################################################################################################################################################################################################################
 
-        # Definir las columnas del dataset
-        column_names = [
-            "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", 
-            "EX-Smoker", "FH", "Obesity", "CRF", "CVA", "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", 
-            "Weak Peripheral Pulse", "Lung rales", "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", 
-            "Function Class", "Atypical", "Nonanginal", "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", 
-            "Tinversion", "LVH", "Poor R Progression", "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", 
-            "WBC", "Lymph", "Neut", "PLT", "EF-TTE", "Region RWMA"
-        ]
+        # # Definir las columnas del dataset
+        # column_names = [
+        #     "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", 
+        #     "EX-Smoker", "FH", "Obesity", "CRF", "CVA", "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", 
+        #     "Weak Peripheral Pulse", "Lung rales", "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", 
+        #     "Function Class", "Atypical", "Nonanginal", "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", 
+        #     "Tinversion", "LVH", "Poor R Progression", "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", 
+        #     "WBC", "Lymph", "Neut", "PLT", "EF-TTE", "Region RWMA"
+        # ]
         
         # Definir las variables categóricas
-        categorical_columns = {
-            "Sex": ["Male", "Female"], "DM": [0,1], "HTN": [0,1], "Current Smoker": [0, 1], "EX-Smoker": [0, 1], "FH": [0, 1], 
-            "Obesity": ["Y", "N"], "CRF": ["Y", "N"], "CVA": ["Y", "N"], "Airway disease": ["Y", "N"], "Thyroid Disease": ["Y", "N"],
-            "CHF": ["Y", "N"], "Edema": [0,1], "Weak Peripheral Pulse": ["Y","N"], "Lung rales": ["Y","N"], 
-            "Systolic Murmur": ["Y","N"], "Diastolic Murmur": ["Y","N"], "Typical Chest Pain": [0,1], "Dyspnea": ["Y","N"],
-            "Function Class": [0,1,2,3], "Atypical": ["Y","N"], "Nonanginal": ["Y","N"], "LowTH Ang": ["Y","N"], 
-            "Q Wave": [0,1], "St Elevation": [0,1], "St Depression": [0,1], "Tinversion": [0,1], "LVH": ["Y", "N"], 
-            "Poor R Progression": ["Y", "N"], "BBB": ["LBBB", "N","RBBB"], "Region RWMA": [0,1,2,3,4]
-        }
+        # categorical_columns = {
+        #     "Sex": ["Male", "Female"], "DM": [0,1], "HTN": [0,1], "Current Smoker": [0, 1], "EX-Smoker": [0, 1], "FH": [0, 1], 
+        #     "Obesity": ["Y", "N"], "CRF": ["Y", "N"], "CVA": ["Y", "N"], "Airway disease": ["Y", "N"], "Thyroid Disease": ["Y", "N"],
+        #     "CHF": ["Y", "N"], "Edema": [0,1], "Weak Peripheral Pulse": ["Y","N"], "Lung rales": ["Y","N"], 
+        #     "Systolic Murmur": ["Y","N"], "Diastolic Murmur": ["Y","N"], "Typical Chest Pain": [0,1], "Dyspnea": ["Y","N"],
+        #     "Function Class": [0,1,2,3], "Atypical": ["Y","N"], "Nonanginal": ["Y","N"], "LowTH Ang": ["Y","N"], 
+        #     "Q Wave": [0,1], "St Elevation": [0,1], "St Depression": [0,1], "Tinversion": [0,1], "LVH": ["Y", "N"], 
+        #     "Poor R Progression": ["Y", "N"], "BBB": ["LBBB", "N","RBBB"], "Region RWMA": [0,1,2,3,4]
+        # }
         
         # Diccionario con descripciones de cada variable
         column_types = {
@@ -286,7 +287,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             "WBC": "Recuento de glóbulos blancos.", "Lymph": "Linfocitos.", "Neut": "Neutrófilos.", "PLT": "Plaquetas.",
             "LVH": "Hipertrofia ventricular izquierda.", "Na": "Sodio.", "K": "Potasio.", "HDL": "Lipoproteínas de alta densidad.",
             "LDL": "Lipoproteínas de baja densidad.", "TG": "Triglicéridos.", "CR": "Creatinina en mg/dl.", "FBS": "Glucosa en ayunas en mg/dl.",
-            "EF-TTE": "Fracción de eyección en porcentaje.", "Region RWMA": "Anormalidades del movimiento regional de la pared."
+            "EF-TTE": "Fracción de eyección en porcentaje.", "Region RWMA": "Anormalidades del movimiento regional de la pared.", "VHD":"Enfermedad valvular del corazón."
         }
         
         # Título de la aplicación

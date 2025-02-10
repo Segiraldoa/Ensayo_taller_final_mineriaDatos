@@ -290,6 +290,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         }
         
         # Título de la aplicación
+        # Título de la aplicación
         st.write("### Formulario de ingreso de datos para predicción")
         
         # Crear el formulario
@@ -300,27 +301,43 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             cols = st.columns(num_columns)
             for j, col in enumerate(column_names[i:i+num_columns]):
                 if col in categorical_columns:
+                    # Inicializar con el primer valor de la lista si no está en session_state
+                    if f"input_{col}" not in st.session_state:
+                        st.session_state[f"input_{col}"] = categorical_columns[col][0]
+        
                     input_value = cols[j].selectbox(
-                        f"{col}", options=categorical_columns[col], help=column_types.get(col, "")
+                        f"{col}", options=categorical_columns[col], 
+                        index=categorical_columns[col].index(st.session_state[f"input_{col}"]),
+                        help=column_types.get(col, "")
                     )
+        
                 else:
+                    # Inicializar con 0.0 si no está en session_state
+                    if f"input_{col}" not in st.session_state:
+                        st.session_state[f"input_{col}"] = 0.0
+        
                     input_value = cols[j].text_input(
-                        f"{col}", value="0.0", help=column_types.get(col, "")
+                        f"{col}", value=str(st.session_state[f"input_{col}"]),
+                        help=column_types.get(col, "")
                     )
+        
                     try:
                         input_value = float(input_value)
                     except ValueError:
                         input_value = 0.0
-                
+        
+                # Guardar el valor en session_state y en input_data
+                st.session_state[f"input_{col}"] = input_value
                 input_data[col] = input_value
         
         st.write("### Datos ingresados")
-        # input_array = np.array(list(input_data.values()), dtype=np.float32)
+        
+        # Procesar los datos en un formato adecuado
         processed_data = [
             str(value) if col in categorical_columns else float(value) 
             for col, value in input_data.items()
         ]
-
+        
         # Convertir la lista en un numpy array
         input_array = np.array(processed_data, dtype=object)  # dtype=object mantiene tipos mixtos
 

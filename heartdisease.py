@@ -112,315 +112,6 @@ df_defecto=X_test.copy()
 df=X_test.copy()
 # df_first_row = df.iloc[0,:].to_frame().T # Estos son los valores por defecto y no deben pasar por encoder
 
-
-
-# Título de la aplicación
-st.title("Exploración de datos: Heart Disease")
-st.image('heartdisease.jpg', caption="Problemas del corazón")
-# Descripción inicial
-st.markdown("""
-Las enfermedades cardiovasculares son muy comunes y representan una de las principales causas de muerte. 
-Entre los principales tipos de estas enfermedades, el diagnóstico correcto y a tiempo de la enfermedad arterial coronaria (CAD) es de suma importancia. 
-
-Aunque la angiografía es el método más preciso para diagnosticar CAD, presenta muchos efectos secundarios y es costoso. 
-Estudios previos han utilizado varias características al recopilar datos de pacientes, aplicando diferentes algoritmos de minería de datos para lograr métodos con alta precisión, menos efectos secundarios y menores costos.
-
-En este contexto, se presenta un conjunto de datos llamado **Z-Alizadeh Sani**, que contiene información de 303 pacientes y 54 características, utilizando varios atributos efectivos para el análisis.
-""")
-st.write("""
-### ¡Bienvenidos!
-Esta aplicación interactiva permite explorar el dataset de Heart Disease.
-Puedes:
-1. Ver los primeros registros.
-2. Consultar información general del dataset.
-3. Mirar las estadisticas descriptivas.
-4. Identificar los datos faltantes.
-5. Analizar la frecuencia de las columnas.
-6. Observar la información de cada paciente.
-7. Explorar la matriz de correlación.
-8. Generar graficos dinámicos.
-
-Y además, transformar los datos mediante la imputación de datos faltantes, la codificación de variables categóricas y la estandarización de los datos.
-""")
-
-# Sección para explorar el dataset
-st.sidebar.header("Exploración de datos")
-
-
-# Mostrar informacion en el dataset
-if st.sidebar.checkbox("Conoce un poco sobre la base de datos"):
-    
-    st.title("Descripción de la base de datos **Z-Alizadeh Sani**")
-    
-    st.markdown("""
-    La base de datos **Z-Alizadeh Sani** contiene información médica de pacientes cardíacos y está estructurada en cuatro categorías principales:
-    """)
-    
-    # Demográficos
-    st.subheader("1. Demográficos")
-    st.markdown("""
-    - **Edad:** 30-86 años.
-    - **Peso:** 48-120 kg.
-    - **Altura:** 140-188 cm.
-    - **Sexo:** M (Masculino), F (Femenino).
-    - **Índice de Masa Corporal (BMI):** 18-41.
-    - **Historial médico:** Diabetes Mellitus (DM), Hipertensión (HTN), fumador actual/ex-fumador, historial familiar (FH), obesidad, insuficiencia renal crónica (CRF), enfermedad pulmonar, etc.
-    """)
-    
-    # Síntomas y Examen Físico
-    st.subheader("2. Síntomas y Examen Físico")
-    st.markdown("""
-    - **Presión Arterial (BP):** 90-190 mmHg.
-    - **Pulso (PR):** 50-110 ppm.
-    - **Síntomas cardíacos:** Edema, dolor torácico, disnea, soplos sistólicos y diastólicos.
-    - **Clase funcional:** Valores del 1 al 4.
-    """)
-    
-    # ECG
-    st.subheader("3. ECG")
-    st.markdown("""
-    - **Anomalías observadas:** Elevación del ST, inversión de T, hipertrofia ventricular izquierda (LVH), etc.
-    """)
-    
-    # Laboratorio y Ecocardiografía
-    st.subheader("4. Laboratorio y Ecocardiografía")
-    st.markdown("""
-    - **Pruebas de laboratorio:**
-      - Glucosa en ayunas (FBS): 62-400 mg/dl.
-      - Creatinina (Cr): 0.5-2.2 mg/dl.
-      - Lípidos (LDL, HDL, TG).
-      - Otros valores como hemoglobina, potasio, sodio, leucocitos, etc.
-    - **Ecocardiografía:**
-      - Fracción de eyección (EF-TTE): 15-60%.
-      - Anormalidades del movimiento regional de la pared (RWMA).
-    """)
-
-
-# Mostrar las primeras filas dinámicamente
-if st.sidebar.checkbox("Mostrar primeras filas"):
-    n_rows = st.sidebar.slider("Número de filas a mostrar:", 1, 50, 5)
-    st.write(f"### Primeras {n_rows} filas del dataset")
-    st.write(heartdisease.head(n_rows))
-
-
-# Mostrar información del dataset
-if st.sidebar.checkbox("Mostrar información del dataset"):
-    st.write("### Información del dataset")
-
-    # Capturar la salida de info() en un buffer
-    buffer = io.StringIO()
-    heartdisease.info(buf=buffer)
-    
-    # Procesar la salida para estructurarla mejor
-    info_text = buffer.getvalue().split("\n")  # Dividir en líneas
-    info_text = [line.strip() for line in info_text if line.strip()]  # Quitar espacios vacíos
-    
-    # Extraer información clave
-    filas_columnas = info_text[0]  # Primera línea con shape
-    columnas_info = info_text[3:]  # A partir de la cuarta línea están las columnas
-
-    # Mostrar filas y columnas
-    st.write(f"**{filas_columnas}**")
-
-    # Convertir la información de columnas en un DataFrame
-    column_data = []
-    for line in columnas_info:
-        parts = line.split()  # Separar por espacios
-        if len(parts) >= 3:
-            column_name = parts[1]  # Nombre de la columna
-            non_null_count = parts[2]  # Cantidad de valores no nulos
-            dtype = parts[-1]  # Tipo de dato
-            column_data.append([column_name, non_null_count, dtype])
-
-    df_info = pd.DataFrame(column_data, columns=["Columna", "No Nulos", "Tipo de Dato"]).iloc[2:]
-    memory_values = df_info.iloc[-1].values
-    memorie_use = " ".join(str(value) for value in memory_values)
-    # Mostrar la tabla en Streamlit
-    st.dataframe(df_info.iloc[:-2])
-    st.write(f"Uso en memoria {memorie_use}")
-
-# Estadísticas descriptivas
-if st.sidebar.checkbox("Mostrar estadísticas descriptivas"):
-    st.write("### Estadísticas descriptivas")
-    st.write(heartdisease.describe())
-    
-# Datos faltantes
-if st.sidebar.checkbox("Mostrar datos faltantes"):
-    st.write("### Datos faltantes por columna")
-    selected_column = st.selectbox("Selecciona una columna para ver los datos faltantes:", heartdisease.columns)
-
-    # Calcular datos faltantes
-    missing_values = heartdisease[selected_column].isnull().sum()
-    total_values = len(heartdisease[selected_column])
-    missing_percentage = (missing_values / total_values) * 100
-
-    # Mostrar resultado
-    st.write(f"### Información de la columna: `{selected_column}`")
-    st.write(f"- **Valores totales:** {total_values}")
-    st.write(f"- **Valores faltantes:** {missing_values} ({missing_percentage:.2f}%)")
-    
-    if st.button("Mostrar todos los valores faltantes"):
-        missing_total = heartdisease.isnull().sum()
-        missing_total_df = pd.DataFrame({"Columna": missing_total.index, "Valores Faltantes": missing_total.values})
-        
-        # Filtrar solo las columnas con valores faltantes
-        missing_total_df = missing_total_df[missing_total_df["Valores Faltantes"] > 0]
-        st.write(missing_total_df)
-
-#Frecuencia Columnas
-if st.sidebar.checkbox("Frecuencia columnas"):
-    st.write("### Frecuencia por columna")
-    columna_seleccionada = st.selectbox("Selecciona una columna para ver su frecuencia:", heartdisease.columns)
-    st.write(heartdisease[columna_seleccionada].value_counts())
-    if st.button("Mostrar valor más frecuente"):
-        st.write(heartdisease[columna_seleccionada].mode()[0])
-
-#Informacion por paciente
-if st.sidebar.checkbox("Información paciente"):
-    st.write("### Informacion por paciente")
-    row_index = st.number_input("Ingresa el índice de la fila a visualizar:", min_value=0, max_value=len(heartdisease)-1, step=1)
-
-    if st.button("Mostrar fila seleccionada"):
-        st.write(f"### Datos de la fila `{row_index}`")
-        st.dataframe(heartdisease.iloc[[row_index]].iloc[:, 1:])
-
-#Matriz de correlacion
-if st.sidebar.checkbox("Matriz de correlacion"):
-    st.write("### Matriz de correlacion")
-    # Filtrar solo las columnas numéricas
-    heartdisease_num = heartdisease.select_dtypes(include=['float64', 'int64'])
-    variables_objetivo = ['Age','Weight','Length', 'BMI', 'BP','PR','FBS','CR','TG','LDL','HDL','BUN','ESR','HB','K','Na','WBC','Lymph','Neut','PLT','EF-TTE']
-    # Calcular la matriz de correlación
-    correlacion = heartdisease_num[variables_objetivo].corr()
-    # Create a mask using numpy's triu function
-    mask = np.triu(np.ones_like(correlacion, dtype=bool))
-    # Configuración de la gráfica
-    # Create a masked heatmap
-    plt.figure(figsize = (10,8))
-    plt.rcParams.update({'font.size': 12})
-    sns.heatmap(correlacion, cmap = 'coolwarm', annot_kws={"size": 7},vmin = -1, vmax = 1, center = 0, annot=True, fmt=".2f", square=True, linewidths=.5, mask = mask)
-    plt.show()
-
-    #plt.figure(figsize=(10, 8))  # Tamaño de la figura
-    #sns.heatmap(correlacion, annot=True, cmap='coolwarm', fmt='.2f', cbar=True, square=True)
-    
-    # Título de la gráfica
-    plt.title('Matriz de Correlación de Heart Disease')
-    
-    # Mostrar la gráfica en Streamlit
-    st.pyplot(plt)
-
-# Sección para gráficos dinámicos
-if st.sidebar.checkbox("Gráficos dinámicos"):
-
-    # Selección de variables para el gráfico
-    x_var = st.sidebar.selectbox("Selecciona la variable X:", heartdisease.columns)
-    y_var = st.sidebar.selectbox("Selecciona la variable Y:", heartdisease.columns)
-    
-    # Tipo de gráfico
-    chart_type = st.sidebar.radio(
-        "Selecciona el tipo de gráfico:",
-        ("Dispersión", "Histograma", "Boxplot")
-    )
-    
-    # Mostrar el gráfico
-    st.write("### Gráficos")
-    if chart_type == "Dispersión":
-        st.write(f"#### Gráfico de dispersión: {x_var} vs {y_var}")
-        fig, ax = plt.subplots()
-        sns.scatterplot(data=heartdisease, x=x_var, y=y_var, ax=ax)
-        st.pyplot(fig)
-    elif chart_type == "Histograma":
-        st.write(f"#### Histograma de {x_var}")
-        fig, ax = plt.subplots()
-        sns.histplot(heartdisease[x_var], bins=30, kde=True, ax=ax)
-        st.pyplot(fig)
-    elif chart_type == "Boxplot":
-        st.write(f"#### Boxplot de {y_var} por {x_var}")
-        fig, ax = plt.subplots()
-        sns.boxplot(data=heartdisease, x=x_var, y=y_var, ax=ax)
-        st.pyplot(fig)
-
-st.sidebar.header("Transformacion datos")
-# Copiar el DataFrame para evitar modificar el original
-if 'heartdisease_copy' not in st.session_state:
-    st.session_state.heartdisease_copy = heartdisease.copy()
-
-if st.sidebar.checkbox("Datos categoricos"):
-    # Estrategias de codificación disponibles
-    estrategias2 = ['Ordinal Encoder', 'OneHot Encoder']
-    
-    # Crear un selectbox para seleccionar la estrategia de codificación
-    strategy2 = st.selectbox('Selecciona una estrategia de codificación:', estrategias2, index=0)
-    
-    # Función para aplicar la codificación
-    def apply_encoding(data, strategy):
-        categorical_cols = data.select_dtypes(exclude=['int64', 'float64']).columns
-        st.write(f'{categorical_cols}')
-        st.write(f'{len(categorical_cols)}')
-        if len(categorical_cols) == 0:
-            st.warning("No hay columnas categóricas en los datos.")
-            return data
-    
-        data_copy = data.copy()
-    
-        if strategy2 == 'Ordinal Encoder':
-            encoder = OrdinalEncoder()
-            data_copy[categorical_cols] = encoder.fit_transform(data_copy[categorical_cols])
-        elif strategy2 == 'OneHot Encoder':
-            encoder = OneHotEncoder(sparse_output=False)
-            encoded_data = pd.DataFrame(encoder.fit_transform(data_copy[categorical_cols]),
-                                        columns=encoder.get_feature_names_out(categorical_cols),
-                                        index=data_copy.index)
-            data_copy = data_copy.drop(categorical_cols, axis=1)
-            data_copy = pd.concat([data_copy, encoded_data], axis=1)
-    
-        return data_copy
-    
-    # Botón para aplicar la estrategia de codificación
-    if st.button('Aplicar Estrategia de Codificación'):
-        encoded_data = apply_encoding(heartdisease, strategy2)
-        
-        # Mostrar los datos codificados
-        st.write(f"Vista previa de los datos codificados usando '{strategy2}':")
-        st.dataframe(encoded_data.head())
-        st.write(f"Información de los datos codificados:")
-        st.write(encoded_data.info())
-        st.session_state.heartdisease_copy = encoded_data.copy()
-
-if st.sidebar.checkbox("Escalado de datos"):
-    st.write("### Escalado de datos")
-    # Estrategias disponibles
-    estrategias1 = ['Standard Scaler', 'MinMax Scaler', 'Robust Scaler']
-
-    # Crear selectbox para seleccionar estrategia
-    strategy = st.selectbox('Selecciona una estrategia de escalado:', estrategias1, index=0)
-    
-    # Función para aplicar el escalado
-    def apply_scaling(data, strategy):
-        numeric_cols = data.select_dtypes(include=['float64', 'int64']).columns
-        if len(numeric_cols) == 0:
-            st.warning("No hay columnas numéricas en los datos.")
-            return data
-        data_copy = data.copy()
-        if strategy == 'Standard Scaler':
-            scaler = StandardScaler()
-            data_copy[numeric_cols] = scaler.fit_transform(data_copy[numeric_cols])
-        elif strategy == 'MinMax Scaler':
-            scaler = MinMaxScaler()
-            data_copy[numeric_cols] = scaler.fit_transform(data_copy[numeric_cols])
-        elif strategy == 'Robust Scaler':
-            scaler = RobustScaler()
-            data_copy[numeric_cols] = scaler.fit_transform(data_copy[numeric_cols])
-        return data_copy
-    
-    # Botón para aplicar la estrategia
-    if st.button('Aplicar Estrategia de Escalado'):
-        scaled_data = apply_scaling(st.session_state.heartdisease_copy, strategy)
-        # Mostrar los datos escalados
-        st.write(f"Vista previa de los datos escalados usando '{strategy}':")
-        st.dataframe(scaled_data.head())
-
 #Modelo Clasico
 if st.sidebar.checkbox("Utilizar arboles de decisión"):
     st.write("### Arboles de decisión")
@@ -435,44 +126,243 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
         data_model1 = st.selectbox("Selecciona un método para la predicción", ['Datos 1','Datos 2','Datos 3','Datos 4','Datos 5','Datos 6','Datos 7','Datos 8','Datos 9','Datos 10'],key="modelo1_eleccion_datos")
         datos_pordefecto1(data_model1)
         
-    if selected_column=='Manual':             
-        # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
-        data = {col: [0.0] for col in column_names}  # Inicializar numéricos en 0
-        for col in categorical_columns:
-            data[col] = [categorical_columns[col][0]]  # Inicializar con el primer valor de la lista
-        df = pd.DataFrame(data)
-        # Convertir columnas categóricas a tipo "category" para que se muestren como dropdown en st.data_editor
-        for col in categorical_columns:
-            df[col] = df[col].astype("category")
-        # Mostrar la tabla editable en Streamlit
-        st.write("### Introduce los datos para la predicción:")
-        edited_df = st.data_editor(df, key="editable_table")
-        # Mostrar la tabla actualizada
-        st.write("#### Datos ingresados:")
-        st.write(edited_df)
-        # Botón para generar la predicción
-        if st.button("Realizar predicción"):
-            st.write("Procesando los datos para la predicción...")
-            # Mostrar los datos originales
-            st.write(" **Datos originales:**")
-            st.write(edited_df)
-            encoder, numerical_columns = load_encoder()
-            # Simulación de datos nuevos
-            new_data = edited_df
-            # Separar variables numéricas y categóricas
-            new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
-            new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
-            # Codificar las variables categóricas
-            encoded_array = encoder.transform(new_data_categorical)            
-            # Convertir la salida a DataFrame con nombres de columnas codificadas
-            encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
-            # Concatenar las variables numéricas con las categóricas codificadas
-            final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
-            prediction=model1.predict(final_data)
-            if prediction==1:
-                st.write("Predicción del modelo:","Cath", prediction)
-            else:
-                st.write("Predicción del modelo:","Normal", prediction)
+    if selected_column=='Manual':
+
+        ###############################################################################################   ################################################################################################
+        # Nombres de las columnas (según el dataset boston_housing)
+        # columns = column_names
+        
+        # column_types = {
+        #     "Age": "Edad en años.",
+        #     "Length": "Estatura en cm.",
+        #     "Weight": "Peso en kg.",
+        #     "Sex": "Sexo de la persona.",
+        #     "BMI": "Índice de masa corporal.",
+        #     "DM": "Diabetes Mellitus.",
+        #     "HTN": "Hipertensión.",
+        #     "Current Smoker": "Fumador actual.",
+        #     "EX-Smoker": "Ex-fumador.",
+        #     "FH": "Historial familiar.",
+        #     "Obesity": "Obesidad.",
+        #     "CRF": "insuficiencia renal crónica.",
+        #     "DLP": "Dislipidemia.",
+        #     "CHF": "Insuficiencia cardíaca congestiva.",
+        #     "Thyroid Disease": "Enfermedad tiroidea.",
+        #     "Airway disease": "Enfermedad de las vías respiratorias.",
+        #     "CVA": "Accidente cerebrovascular.",
+        #     "Typical Chest Pain": "Dolor torácico típico.",
+        #     "Edema": "Edema.",
+        #     "Diastolic Murmur": "Soplo diastólico.",
+        #     "Systolic Murmur": "Soplo sistólico.",
+        #     "Dyspnea": "Disnea.",
+        #     "Function Class": "Clase funcional.",
+        #     "PR": "Pulso en ppm.",
+        #     "BP": "Presión arterial en mmHg.",
+        #     "Weak Peripheral Pulse": "Pulso periférico débil.",
+        #     "Lung rales": "Estertores pulmonares.",
+        #     "Atypical": "Dolor torácico atípico.",
+        #     "Nonanginal": "Dolor torácico no anginoso.",
+        #     "Exertional CP": "Dolor torácico por esfuerzo.",
+        #     "LowTH Ang": "Angina de umbral bajo.",
+        #     "Q Wave": "Onda Q.",
+        #     "St Elevation": "Elevación del segmento ST.",
+        #     "St Depression": "Depresión del segmento ST.",
+        #     "Tinversion": "Inversión de la onda T.",
+        #     "Poor R Progression": "Mala progresión de la onda R",
+        #     "BBB": "Bloqueo de rama.",
+        #     "BUN": "Nitrógeno ureico en sangre.",
+        #     "ESR": "Velocidad de sedimentación globular.",
+        #     "HB": "Hemoglobina.",
+        #     "WBC": "Recuento de glóbulos blancos.",
+        #     "Lymph": "Linfocitos.",
+        #     "Neut": "Neutrófilos.",
+        #     "PLT": "Plaquetas.",
+        #     "LVH": "hipertrofia ventricular izquierda.",
+        #     "Na": "Sodio.",
+        #     "K": "Potasio.",
+        #     "HDL": "lipoproteínas de alta densidad.",
+        #     "LDL": "lipoproteínas de baja densidad.",
+        #     "TG": "triglicéridos.",
+        #     "Cr": "Creatinina en mg/dl.",
+        #     "FBS": "Glucosa en ayuanas en mg/dl.",
+        #     "EF-TTE": "Fracción de eyección en porcentaje.",
+        #     "RWMA": "Anormalidades del movimiento regional de la pared."
+        # }
+        
+        # # Categorías disponibles para las variables categóricas
+        # chas_options = [0, 1]  # CHAS solo puede ser 0 o 1
+        # rad_options = list(range(1, 25))  # Suponiendo que RAD es un índice con valores entre 1 y 24
+    
+        
+        # # Explicación breve
+        # st.write("#### Datos de la vivienda")
+        # st.write("Introduce los datos de la vivienda para estimar su precio promedio.")
+        
+        # # Inicializar las variables en st.session_state si no están presentes
+        # for col in columns:
+        #     if f"input_{col}" not in st.session_state:
+        #         st.session_state[f"input_{col}"] = 0.0  # Inicializar cada variable individualmente con valor 0.0
+    
+        # # Organizar la entrada en forma de tabla con 6 columnas
+        # input_data = {}
+    
+        # # Número de columnas que queremos
+        # num_columns = 3
+    
+        # # Crear número de filas necesario según el número de variables
+        # for i in range(0, len(columns), num_columns):
+        #     # Crear 3 columnas para cada fila
+        #     cols = st.columns(num_columns)
+            
+        #     for j, col in enumerate(columns[i:i+num_columns]):
+        #         # Usamos un selectbox para CHAS y RAD, y text_input para el resto de las variables
+        #         if col == "CHAS":
+        #             input_value = cols[j].selectbox(
+        #                 f"Ingrese el valor para {col} (0 o 1)", 
+        #                 options=chas_options,
+        #                 help=column_types[col]
+        #             )
+        #         elif col == "RAD":
+        #             input_value = cols[j].selectbox(
+        #                 f"Ingrese el valor para {col} (1-24)", 
+        #                 options=rad_options,
+        #                 help=column_types[col]
+        #             )
+        #         else:
+        #             # Para otras variables numéricas, seguimos usando text_input
+        #             input_value = cols[j].text_input(
+        #                 f"Ingrese el valor para {col}",
+        #                 value=str(st.session_state[f'input_{col}']),  # Como texto para evitar botones
+        #                 help=column_types[col]  # Mostrar el tipo de la variable
+        #             )
+    
+        #         # Convertir el valor ingresado a número (si es válido)
+        #         try:
+        #             input_value = float(input_value) if input_value else 0.0  # Usar 0.0 si no se ingresa valor
+        #         except ValueError:
+        #             input_value = 0.0  # En caso de que no se ingrese un número válido
+    
+        #         # Guardamos el valor en session_state
+        #         st.session_state[f'input_{col}'] = input_value
+        #         input_data[col] = input_value  # Guardar el valor en el diccionario de entrada
+    
+    
+    ####################################################################################################################################################################################################################################################################################
+
+        # Definir las columnas del dataset
+        column_names = [
+            "Age", "Weight", "Length", "Sex", "BMI", "DM", "HTN", "Current Smoker", 
+            "EX-Smoker", "FH", "Obesity", "CRF", "CVA", "Airway disease", "Thyroid Disease", "CHF", "DLP", "BP", "PR", "Edema", 
+            "Weak Peripheral Pulse", "Lung rales", "Systolic Murmur", "Diastolic Murmur", "Typical Chest Pain", "Dyspnea", 
+            "Function Class", "Atypical", "Nonanginal", "Exertional CP", "LowTH Ang", "Q Wave", "St Elevation", "St Depression", 
+            "Tinversion", "LVH", "Poor R Progression", "BBB", "FBS", "CR", "TG", "LDL", "HDL", "BUN", "ESR", "HB", "K", "Na", 
+            "WBC", "Lymph", "Neut", "PLT", "EF-TTE", "Region RWMA"
+        ]
+        
+        # Definir las variables categóricas
+        categorical_columns = {
+            "Sex": ["Male", "Female"], "DM": [0,1], "HTN": [0,1], "Current Smoker": [0, 1], "EX-Smoker": [0, 1], "FH": [0, 1], 
+            "Obesity": ["Y", "N"], "CRF": ["Y", "N"], "CVA": ["Y", "N"], "Airway disease": ["Y", "N"], "Thyroid Disease": ["Y", "N"],
+            "CHF": ["Y", "N"], "Edema": [0,1], "Weak Peripheral Pulse": ["Y","N"], "Lung rales": ["Y","N"], 
+            "Systolic Murmur": ["Y","N"], "Diastolic Murmur": ["Y","N"], "Typical Chest Pain": [0,1], "Dyspnea": ["Y","N"],
+            "Function Class": [0,1,2,3], "Atypical": ["Y","N"], "Nonanginal": ["Y","N"], "LowTH Ang": ["Y","N"], 
+            "Q Wave": [0,1], "St Elevation": [0,1], "St Depression": [0,1], "Tinversion": [0,1], "LVH": ["Y", "N"], 
+            "Poor R Progression": ["Y", "N"], "BBB": ["LBBB", "N","RBBB"], "Region RWMA": [0,1,2,3,4]
+        }
+        
+        # Diccionario con descripciones de cada variable
+        column_types = {
+            "Age": "Edad en años.", "Length": "Estatura en cm.", "Weight": "Peso en kg.", "Sex": "Sexo de la persona.",
+            "BMI": "Índice de masa corporal.", "DM": "Diabetes Mellitus.", "HTN": "Hipertensión.", "Current Smoker": "Fumador actual.",
+            "EX-Smoker": "Ex-fumador.", "FH": "Historial familiar.", "Obesity": "Obesidad.", "CRF": "Insuficiencia renal crónica.",
+            "DLP": "Dislipidemia.", "CHF": "Insuficiencia cardíaca congestiva.", "Thyroid Disease": "Enfermedad tiroidea.",
+            "Airway disease": "Enfermedad de las vías respiratorias.", "CVA": "Accidente cerebrovascular.", "Typical Chest Pain": "Dolor torácico típico.",
+            "Edema": "Edema.", "Diastolic Murmur": "Soplo diastólico.", "Systolic Murmur": "Soplo sistólico.", "Dyspnea": "Disnea.",
+            "Function Class": "Clase funcional.", "PR": "Pulso en ppm.", "BP": "Presión arterial en mmHg.", "Weak Peripheral Pulse": "Pulso periférico débil.",
+            "Lung rales": "Estertores pulmonares.", "Atypical": "Dolor torácico atípico.", "Nonanginal": "Dolor torácico no anginoso.",
+            "Exertional CP": "Dolor torácico por esfuerzo.", "LowTH Ang": "Angina de umbral bajo.", "Q Wave": "Onda Q.", "St Elevation": "Elevación del segmento ST.",
+            "St Depression": "Depresión del segmento ST.", "Tinversion": "Inversión de la onda T.", "Poor R Progression": "Mala progresión de la onda R.",
+            "BBB": "Bloqueo de rama.", "BUN": "Nitrógeno ureico en sangre.", "ESR": "Velocidad de sedimentación globular.", "HB": "Hemoglobina.",
+            "WBC": "Recuento de glóbulos blancos.", "Lymph": "Linfocitos.", "Neut": "Neutrófilos.", "PLT": "Plaquetas.",
+            "LVH": "Hipertrofia ventricular izquierda.", "Na": "Sodio.", "K": "Potasio.", "HDL": "Lipoproteínas de alta densidad.",
+            "LDL": "Lipoproteínas de baja densidad.", "TG": "Triglicéridos.", "CR": "Creatinina en mg/dl.", "FBS": "Glucosa en ayunas en mg/dl.",
+            "EF-TTE": "Fracción de eyección en porcentaje.", "Region RWMA": "Anormalidades del movimiento regional de la pared."
+        }
+        
+        # Título de la aplicación
+        st.write("### Formulario de ingreso de datos para predicción")
+        
+        # Crear el formulario
+        input_data = {}
+        num_columns = 3  # Definir el número de columnas para organizar los campos
+        
+        for i in range(0, len(column_names), num_columns):
+            cols = st.columns(num_columns)
+            for j, col in enumerate(column_names[i:i+num_columns]):
+                if col in categorical_columns:
+                    input_value = cols[j].selectbox(
+                        f"{col}", options=categorical_columns[col], help=column_types.get(col, "")
+                    )
+                else:
+                    input_value = cols[j].text_input(
+                        f"{col}", value="0.0", help=column_types.get(col, "")
+                    )
+                    try:
+                        input_value = float(input_value)
+                    except ValueError:
+                        input_value = 0.0
+                
+                input_data[col] = input_value
+        
+        st.write("### Datos ingresados")
+        st.json(input_data)
+
+
+
+        
+
+        
+
+
+        ################################################################################################   ################################################################################################
+     
+        # # Crear DataFrame inicial con valores numéricos en 0 y categóricos con el primer valor de la lista
+        # data = {col: [0.0] for col in column_names}  # Inicializar numéricos en 0
+        # for col in categorical_columns:
+        #     data[col] = [categorical_columns[col][0]]  # Inicializar con el primer valor de la lista
+        # df = pd.DataFrame(data)
+        # # Convertir columnas categóricas a tipo "category" para que se muestren como dropdown en st.data_editor
+        # for col in categorical_columns:
+        #     df[col] = df[col].astype("category")
+        # # Mostrar la tabla editable en Streamlit
+        # st.write("### Introduce los datos para la predicción:")
+        # edited_df = st.data_editor(df, key="editable_table")
+        # # Mostrar la tabla actualizada
+        # st.write("#### Datos ingresados:")
+        # st.write(edited_df)
+        # # Botón para generar la predicción
+        # if st.button("Realizar predicción"):
+        #     st.write("Procesando los datos para la predicción...")
+        #     # Mostrar los datos originales
+        #     st.write(" **Datos originales:**")
+        #     st.write(edited_df)
+        #     encoder, numerical_columns = load_encoder()
+        #     # Simulación de datos nuevos
+        #     new_data = edited_df
+        #     # Separar variables numéricas y categóricas
+        #     new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
+        #     new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
+        #     # Codificar las variables categóricas
+        #     encoded_array = encoder.transform(new_data_categorical)            
+        #     # Convertir la salida a DataFrame con nombres de columnas codificadas
+        #     encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
+        #     # Concatenar las variables numéricas con las categóricas codificadas
+        #     final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
+        #     prediction=model1.predict(final_data)
+        #     if prediction==1:
+        #         st.write("Predicción del modelo:","Cath", prediction)
+        #     else:
+        #         st.write("Predicción del modelo:","Normal", prediction)
 
 # Modelo de redes neuronales
 if st.sidebar.checkbox("Utilizar redes Neuronales"): 

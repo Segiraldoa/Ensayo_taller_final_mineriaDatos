@@ -315,6 +315,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 input_data[col] = input_value
         
         st.write("### Datos ingresados")
+        input_array = np.array(list(input_data.values()), dtype=np.float32)
         # st.json(input_data)
 
 
@@ -346,10 +347,10 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
             st.write("Procesando los datos para la predicción...")
             # Mostrar los datos originales
             st.write(" **Datos originales:**")
-            st.write(input_data)
+            st.write(input_array)
             encoder, numerical_columns = load_encoder()
             # Simulación de datos nuevos
-            new_data = input_data   
+            new_data = input_array   
             # Separar variables numéricas y categóricas
             new_data_categorical = new_data[encoder.feature_names_in_]  # Mantiene solo las categóricas
             new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            

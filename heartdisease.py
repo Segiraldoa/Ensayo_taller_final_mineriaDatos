@@ -43,9 +43,9 @@ model2=load_model_2()
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
     prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T))
-    st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
     st.write(prediction1)
+    st.write(int(y_test[n]))
     if prediction1==1 and int(y_test[n])==1:
         st.write("Predicción del modelo:","Cath", prediction1)
         st.write("Clasificación real:","Cath", y_test[n])

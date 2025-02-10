@@ -42,7 +42,7 @@ model2=load_model_2()
 
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
-    prediction1 = np.argmax(model1.predict(df.iloc[n,:].to_frame().T))
+    prediction1 = int(np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))
     st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
     st.write(type(model1.predict(df.iloc[n,:].to_frame().T)))

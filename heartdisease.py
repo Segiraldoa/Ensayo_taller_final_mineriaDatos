@@ -315,7 +315,15 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 input_data[col] = input_value
         
         st.write("### Datos ingresados")
-        input_array = np.array(list(input_data.values()), dtype=np.float32)
+        # input_array = np.array(list(input_data.values()), dtype=np.float32)
+        processed_data = [
+            str(value) if col in categorical_columns else float(value) 
+            for col, value in input_data.items()
+        ]
+
+        # Convertir la lista en un numpy array
+        input_array = np.array(processed_data, dtype=object)  # dtype=object mantiene tipos mixtos
+
         # st.json(input_data)
 
 

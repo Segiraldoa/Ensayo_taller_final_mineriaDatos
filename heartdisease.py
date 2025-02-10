@@ -46,12 +46,11 @@ def datos_pordefecto1(data_model):
     st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
     st.write(prediction1)
-    
-    if prediction1==1 and y_test[n]==1:
+    if prediction1==1 and int(y_test[n])==1:
         st.write("Predicción del modelo:","Cath", prediction1)
         st.write("Clasificación real:","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
-    if prediction1==0 and y_test[n]==0:
+    if prediction1==0 and int(y_test[n])==0:
         st.write("Predicción del modelo:","Normal", prediction1)
         st.write("Clasificación real:","Normal", y_test[n])
         st.write("¡El modelo acertó!")

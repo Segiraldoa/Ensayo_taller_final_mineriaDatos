@@ -300,10 +300,16 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                     # Inicializar con el primer valor de la lista si no está en session_state
                     if f"input_{col}" not in st.session_state:
                         st.session_state[f"input_{col}"] = categorical_columns[col][0]
-        
+                
+                    # PASO 2: Convertir el valor en session_state a string si es necesario
+                    input_value = st.session_state[f"input_{col}"]
+                    if isinstance(input_value, float):  # Evitar errores con índices de selectbox
+                        input_value = str(int(input_value))  # Convertir a string si es necesario
+                
                     input_value = cols[j].selectbox(
-                        f"{col}", options=categorical_columns[col], 
-                        index=categorical_columns[col].index(st.session_state[f"input_{col}"]),
+                        f"{col}", 
+                        options=categorical_columns[col], 
+                        index=categorical_columns[col].index(input_value) if input_value in categorical_columns[col] else 0, 
                         help=column_types.get(col, "")
                     )
         

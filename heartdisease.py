@@ -45,7 +45,7 @@ def datos_pordefecto1(data_model):
     prediction1 = int(np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))
     st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
-    st.write(type(model1.predict(df.iloc[n,:].to_frame().T)))
+    st.write(type(prediction1))
     
     if prediction1==1 and y_test[n]==1:
         st.write("Predicción del modelo:","Cath", np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))

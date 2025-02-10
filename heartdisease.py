@@ -43,8 +43,8 @@ model2=load_model_2()
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
     prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T))
-    st.write("Valor del modelo: "model1.predict(df.iloc[n,:].to_frame().T))
-    st.write("Valor de la predicción"prediction1)
+    st.write("Valor del modelo: ",model1.predict(df.iloc[n,:].to_frame().T))
+    st.write("Valor de la predicción",prediction1)
     st.write(int(y_test[n]))
     if prediction1==1 and int(y_test[n])==1:
         st.write("Predicción del modelo:","Cath", prediction1)

@@ -42,33 +42,28 @@ model2=load_model_2()
 
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
-    prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T))
-    st.write("Valor del modelo: ",model1.predict(df.iloc[n,:].to_frame().T))
-    st.write("Valor de la predicción",prediction1)
-    st.write(int(y_test[n]))
+    prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T)))
     if prediction1==1 and int(y_test[n])==1:
         st.write("Predicción del modelo:","Cath", prediction1)
         st.write("Clasificación real:","Cath", y_test[n])
-        st.write("¡El modelo acertó!1")                    
+        st.write("¡El modelo acertó!")                    
     elif prediction1==0 and int(y_test[n])==0:
         st.write("Predicción del modelo:","Normal", prediction1)
         st.write("Clasificación real:","Normal", y_test[n])
-        st.write("¡El modelo acertó!2")
+        st.write("¡El modelo acertó!")
     else:
         st.write("Predicción del modelo:", prediction1)
         st.write("Clasificación real", y_test[n])
-        st.write("¡El modelo falló!3")
+        st.write("¡El modelo falló!")
         
 def datos_pordefecto2(data_model):
     n=int(data_model[-1])               
     prediction2 = int(np.argmax(model2.predict(df.iloc[n,:].to_frame().T)))
-    st.write(n)
-    st.write(model2.predict(df.iloc[n,:].to_frame().T))
-    if prediction2==1 and y_test[n]==1:
+    if prediction2==1 and int(y_test[n])==1:
         st.write("Predicción del modelo:","Cath", prediction2)
         st.write("Clasificación real","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
-    elif prediction2==0 and y_test[n]==0:
+    elif prediction2==0 and int(y_test[n])==0:
         st.write("Predicción del modelo:","Normal", prediction2)
         st.write("Clasificación real","Normal", y_test[n])
         st.write("¡El modelo acertó!")
@@ -92,7 +87,7 @@ column_names = [
         ]
 categorical_columns = {
             "Sex": ["Male", "Female"], "DM": [0,1], "HTN": [0,1], "Current Smoker": [0, 1],"EX-Smoker": [0, 1],"FH": [0, 1],"Obesity": ["Y", "N"],
-            "CRF": ["Y", "N"],"CVA": ["Y", "N"],"Airway disease": ["Y", "N"],"Thyroid Disease": ["Y", "N"],"CHF": ["Y", "N"],"Edema": [0,1],
+            "CRF": ["Y", "N"],"CVA": ["Y", "N"],"Airway disease": ["Y", "N"],"Thyroid Disease": ["Y", "N"],"CHF": ["Y", "N"],"DLP":["Y","N"]"Edema": [0,1],
             "Weak Peripheral Pulse": ["Y","N"],"Lung rales": ["Y","N"],"Systolic Murmur": ["Y","N"],"Diastolic Murmur": ["Y","N"],"Typical Chest Pain": [0,1],
             "Dyspnea": ["Y","N"],"Function Class": [0,1,2,3],"Atypical": ["Y","N"],"Nonanginal": ["Y","N"],"LowTH Ang": ["Y","N"],"Q Wave": [0,1],
             "St Elevation": [0,1],"St Depression": [0, 1],"Tinversion": [0, 1],"LVH": ["Y", "N"],"Poor R Progression": ["Y", "N"],"BBB": ["LBBB", "N","RBBB"], 

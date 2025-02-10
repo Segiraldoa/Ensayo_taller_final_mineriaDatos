@@ -63,7 +63,7 @@ def datos_pordefecto1(data_model):
         
 def datos_pordefecto2(data_model):
     n=int(data_model[-1])               
-    prediction2 = np.argmax(model2.predict(df.iloc[n,:].to_frame().T))
+    prediction2 = int(np.argmax(model2.predict(df.iloc[n,:].to_frame().T)))
     st.write(n)
     st.write(model2.predict(df.iloc[n,:].to_frame().T))
     if prediction2==1 and y_test[n]==1:

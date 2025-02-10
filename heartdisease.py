@@ -42,9 +42,10 @@ model2=load_model_2()
 
 def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
-    prediction1 = int(np.argmax(model1.predict(df.iloc[n,:].to_frame().T)))
+    prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T))
     st.write(df.iloc[n,:].to_frame().T)
     st.write(model1.predict(df.iloc[n,:].to_frame().T))
+    st.write(prediction1)
     st.write(type(prediction1))
     
     if prediction1==1 and y_test[n]==1:

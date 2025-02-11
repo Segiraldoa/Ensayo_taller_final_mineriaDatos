@@ -276,15 +276,15 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
 
             # Codificar las variables categóricas
             encoded_array = encoder.transform(new_data_categorical)
-            st.write("array: "encoded_array)
+            st.write("array: ",encoded_array)
 
             # Convertir la salida a DataFrame con nombres de columnas codificadas
             encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
-            st.write("df: "encoded_df)
+            st.write("df: ",encoded_df)
 
             # Concatenar las variables numéricas con las categóricas codificadas
             final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-            st.write("Final: "final_data)
+            st.write("Final: ",final_data)
 
             # Realizar la predicción
             prediction = model1.predict(final_data)

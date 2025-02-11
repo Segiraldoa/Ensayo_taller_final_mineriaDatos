@@ -416,38 +416,6 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             
             # Seleccionar la fila correspondiente
             selected_row = df_excel.iloc[row_number, :]
-            
-            # # Mostrar la fila seleccionada
-            # st.write("### Fila seleccionada para la predicción:")
-            # st.write(selected_row)
-
-            # # Preparar los datos para la predicción: aplicar One Hot Encoder y separación de variables numéricas
-            # encoder, numerical_columns = load_encoder()
-
-            # # Separar variables categóricas y numéricas
-            # new_data_categorical = selected_row[encoder.feature_names_in_].to_frame().T  # Convertir a DataFrame
-            # new_data_numerical = selected_row[numerical_columns].to_frame().T  # Convertir a DataFrame
-
-            # # Codificar las variables categóricas
-            # encoded_array = encoder.transform(new_data_categorical)
-            # st.write("array: ",encoded_array)
-
-            # # Convertir la salida a DataFrame con nombres de columnas codificadas
-            # encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
-            # st.write("df: ",encoded_df)
-
-            # # Concatenar las variables numéricas con las categóricas codificadas
-            # final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-            # st.write("Final: ",type(final_data))
-            
-
-            # # Realizar la predicción
-            # prediction = np.argmax(model2.predict(final_data))
-
-            # if prediction == 1:
-            #     st.write("Predicción del modelo:","Cath", prediction)
-            # else:
-            #     st.write("Predicción del modelo:","Normal", prediction)
 
             if st.button("Realizar predicción",key="modelo2_predic_excel"):
                 st.write("Procesando los datos para la predicción...")

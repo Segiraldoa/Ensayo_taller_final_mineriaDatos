@@ -438,7 +438,8 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
 
             # Concatenar las variables numéricas con las categóricas codificadas
             final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-            st.write("Final: ",final_data)
+            st.write("Final: ",type(final_data))
+            
 
             # Realizar la predicción
             prediction = np.argmax(model2.predict(final_data))

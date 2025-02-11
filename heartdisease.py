@@ -418,37 +418,65 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             # Seleccionar la fila correspondiente
             selected_row = df_excel.iloc[row_number, :]
             
-            # Mostrar la fila seleccionada
-            st.write("### Fila seleccionada para la predicción:")
-            st.write(selected_row)
+            # # Mostrar la fila seleccionada
+            # st.write("### Fila seleccionada para la predicción:")
+            # st.write(selected_row)
 
-            # Preparar los datos para la predicción: aplicar One Hot Encoder y separación de variables numéricas
-            encoder, numerical_columns = load_encoder()
+            # # Preparar los datos para la predicción: aplicar One Hot Encoder y separación de variables numéricas
+            # encoder, numerical_columns = load_encoder()
 
-            # Separar variables categóricas y numéricas
-            new_data_categorical = selected_row[encoder.feature_names_in_].to_frame().T  # Convertir a DataFrame
-            new_data_numerical = selected_row[numerical_columns].to_frame().T  # Convertir a DataFrame
+            # # Separar variables categóricas y numéricas
+            # new_data_categorical = selected_row[encoder.feature_names_in_].to_frame().T  # Convertir a DataFrame
+            # new_data_numerical = selected_row[numerical_columns].to_frame().T  # Convertir a DataFrame
 
-            # Codificar las variables categóricas
-            encoded_array = encoder.transform(new_data_categorical)
-            st.write("array: ",encoded_array)
+            # # Codificar las variables categóricas
+            # encoded_array = encoder.transform(new_data_categorical)
+            # st.write("array: ",encoded_array)
 
-            # Convertir la salida a DataFrame con nombres de columnas codificadas
-            encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
-            st.write("df: ",encoded_df)
+            # # Convertir la salida a DataFrame con nombres de columnas codificadas
+            # encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())
+            # st.write("df: ",encoded_df)
 
-            # Concatenar las variables numéricas con las categóricas codificadas
-            final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
-            st.write("Final: ",type(final_data))
+            # # Concatenar las variables numéricas con las categóricas codificadas
+            # final_data = pd.concat([new_data_numerical, encoded_df], axis=1)
+            # st.write("Final: ",type(final_data))
             
 
-            # Realizar la predicción
-            prediction = np.argmax(model2.predict(final_data))
+            # # Realizar la predicción
+            # prediction = np.argmax(model2.predict(final_data))
 
-            if prediction == 1:
-                st.write("Predicción del modelo:","Cath", prediction)
-            else:
-                st.write("Predicción del modelo:","Normal", prediction)
+            # if prediction == 1:
+            #     st.write("Predicción del modelo:","Cath", prediction)
+            # else:
+            #     st.write("Predicción del modelo:","Normal", prediction)
+
+            if st.button("Realizar predicción",key="modelo2_predic_excel"):
+                st.write("Procesando los datos para la predicción...")
+                # Mostrar los datos originales
+                st.write(" **Datos originales:**")
+                st.write(input_array)
+                encoder, numerical_columns = load_encoder()
+                # Simulación de datos nuevos
+                new_data = selected_row
+                if not isinstance(new_data, pd.DataFrame):
+                    new_data = pd.DataFrame([new_data], columns=column_names)
+                # Seleccionar solo las variables categóricas
+                new_data_categorical = new_data.loc[:, encoder.feature_names_in_]
+                # Separar variables numéricas y categóricas
+                new_data_numerical = new_data[numerical_columns]  # Mantiene solo las numéricas            
+                # Codificar las variables categóricas
+                encoded_array = encoder.transform(new_data_categorical)            
+                # Convertir la salida a DataFrame con nombres de columnas codificadas
+                encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
+                # Concatenar las variables numéricas con las categóricas codificadas
+                final_data = pd.concat([new_data_numerical, encoded_df], axis=1)  
+                st.write(type(final_data))
+                prediction=np.argmax(model2.predict(final_data))
+                if prediction==1:
+                    st.write("Predicción del modelo:","Cath", prediction)
+                else:
+                    st.write("Predicción del modelo:","Normal", prediction)
+    
 
 
 # additional_params = {

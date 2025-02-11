@@ -44,6 +44,7 @@ def datos_pordefecto1(data_model):
     n=int(data_model[-1])               
     prediction1 = int(model1.predict(df.iloc[n,:].to_frame().T))
     if prediction1==1 and int(y_test[n])==1:
+        st.write("V",)
         st.write("Predicción del modelo:","Cath", prediction1)
         st.write("Clasificación real:","Cath", y_test[n])
         st.write("¡El modelo acertó!")                    
@@ -168,7 +169,7 @@ if st.sidebar.checkbox("Utilizar arboles de decisión"):
                 else:
                     # Inicializar con 0.0 si no está en session_state
                     if f"input_{col}" not in st.session_state:
-                        st.session_state[f"input_{col}"] = 0.0
+                        st.session_state[f"input_{col}"] = 0
         
                     input_value = cols[j].text_input(
                         f"{col}", value=str(st.session_state[f"input_{col}"]),
@@ -266,7 +267,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
                 else:
                     # Inicializar con 0.0 si no está en session_state
                     if f"input_{col}" not in st.session_state:
-                        st.session_state[f"input_{col}"] = 0.0
+                        st.session_state[f"input_{col}"] = 0
         
                     input_value = cols[j].text_input(
                         f"{col}", value=str(st.session_state[f"input_{col}"]),
@@ -314,7 +315,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
             # Concatenar las variables numéricas con las categóricas codificadas
             final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
-            prediction=model2.predict(final_data)
+            prediction=np.argmax(model2.predict(final_data))
             if prediction==1:
                 st.write("Predicción del modelo:","Cath", prediction)
             else:

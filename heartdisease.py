@@ -392,7 +392,8 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
             # Convertir la salida a DataFrame con nombres de columnas codificadas
             encoded_df = pd.DataFrame(encoded_array, columns=encoder.get_feature_names_out())            
             # Concatenar las variables numéricas con las categóricas codificadas
-            final_data = pd.concat([new_data_numerical, encoded_df], axis=1)    
+            final_data = pd.concat([new_data_numerical, encoded_df], axis=1)  
+            st.write(type(final_data))
             prediction=np.argmax(model2.predict(final_data))
             if prediction==1:
                 st.write("Predicción del modelo:","Cath", prediction)

@@ -454,7 +454,7 @@ if st.sidebar.checkbox("Utilizar redes Neuronales"):
                 st.write("Procesando los datos para la predicción...")
                 # Mostrar los datos originales
                 st.write(" **Datos originales:**")
-                st.write(input_array)
+                # st.write(input_array)
                 encoder, numerical_columns = load_encoder()
                 # Simulación de datos nuevos
                 new_data = selected_row

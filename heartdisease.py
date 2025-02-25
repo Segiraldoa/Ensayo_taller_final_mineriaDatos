@@ -16,8 +16,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 
-
-
+st.set_page_config(layout="wide")  # Expande el ancho
 st.markdown("<h1 style='color: blue;'>Hola, Streamlit con HTML!</h1>", unsafe_allow_html=True)
 
 st.markdown(
@@ -134,12 +133,6 @@ with col8:
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], color="red")
     st.pyplot(fig)
-
-
-
-
-
-
 
 
 

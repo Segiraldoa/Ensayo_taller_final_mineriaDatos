@@ -55,7 +55,12 @@ with col2:
     ax.scatter(data[:, 0], data[:, 1], color="red")
     st.pyplot(fig)
 
-
+# Gráfico 2 en la segunda columna
+with col3:
+    st.subheader("Gráfico 3")
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="green")
+    st.pyplot(fig)
 
 
 with st.container():
@@ -71,28 +76,58 @@ with st.container():
     st.pyplot(fig)
 
 
-with st.grid(expand=True) as grid:
-    cell1 = grid.cell()
-    cell2 = grid.cell()
-    cell3 = grid.cell()
-    cell4 = grid.cell()
 
-with cell1:
-    st.subheader("Gráfico 1")
-    st.line_chart(np.random.randn(20, 2))
+# Simulación de datos
+data = np.random.randn(100, 2)
 
-with cell2:
-    st.subheader("Gráfico 2")
+# Título del Dashboard
+st.title("Dashboard con 8 Gráficos (2 Filas x 4 Columnas)")
+
+# Primera fila (4 columnas)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.subheader("Gráfico 1 - Histograma")
+    fig, ax = plt.subplots()
+    ax.hist(data[:, 0], bins=20, color="blue", alpha=0.7)
+    st.pyplot(fig)
+
+with col2:
+    st.subheader("Gráfico 2 - Dispersión")
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="red")
+    st.pyplot(fig)
+
+with col3:
+    st.subheader("Gráfico 3 - Serie de tiempo")
+    st.line_chart(np.cumsum(np.random.randn(100)))
+
+with col4:
+    st.subheader("Gráfico 4 - Barras")
     st.bar_chart(np.random.rand(10))
 
-with cell3:
-    st.subheader("Gráfico 3")
-    st.area_chart(np.random.randn(30, 2))
+# Segunda fila (4 columnas)
+col5, col6, col7, col8 = st.columns(4)
 
-with cell4:
-    st.subheader("Gráfico 4")
-    st.line_chart(np.random.randn(15, 3))
+with col5:
+    st.subheader("Gráfico 5 - Área")
+    st.area_chart(np.random.randn(50))
 
+with col6:
+    st.subheader("Gráfico 6 - Histograma")
+    fig, ax = plt.subplots()
+    ax.hist(data[:, 1], bins=15, color="green", alpha=0.6)
+    st.pyplot(fig)
+
+with col7:
+    st.subheader("Gráfico 7 - Dispersión")
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 1], data[:, 0], color="purple")
+    st.pyplot(fig)
+
+with col8:
+    st.subheader("Gráfico 8 - Barras")
+    st.bar_chart(np.random.rand(15))
 
 
 

@@ -100,7 +100,9 @@ with col2:
 
 with col3:
     st.subheader("Gráfico 3 - Serie de tiempo")
-    st.line_chart(np.cumsum(np.random.randn(100)))
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="red")
+    st.pyplot(fig)
 
 with col4:
     st.subheader("Gráfico 4 - Barras")
@@ -111,7 +113,9 @@ col5, col6, col7, col8 = st.columns(4)
 
 with col5:
     st.subheader("Gráfico 5 - Área")
-    st.area_chart(np.random.randn(50))
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="red")
+    st.pyplot(fig)
 
 with col6:
     st.subheader("Gráfico 6 - Histograma")
@@ -127,7 +131,9 @@ with col7:
 
 with col8:
     st.subheader("Gráfico 8 - Barras")
-    st.bar_chart(np.random.rand(15))
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="red")
+    st.pyplot(fig)
 
 
 

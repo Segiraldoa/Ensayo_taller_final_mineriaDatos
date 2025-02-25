@@ -99,14 +99,16 @@ with col2:
     st.pyplot(fig)
 
 with col3:
-    st.subheader("Gráfico 3 - Serie de tiempo")
+    st.subheader("Gráfico 3 - tiempo")
     fig, ax = plt.subplots()
     ax.scatter(data[:, 0], data[:, 1], color="red")
     st.pyplot(fig)
 
 with col4:
     st.subheader("Gráfico 4 - Barras")
-    st.bar_chart(np.random.rand(10))
+    fig, ax = plt.subplots()
+    ax.scatter(data[:, 0], data[:, 1], color="red")
+    st.pyplot(fig)
 
 # Segunda fila (4 columnas)
 col5, col6, col7, col8 = st.columns(4)

@@ -39,7 +39,7 @@ st.markdown(
 data = np.random.randn(100, 2)
 
 # Creando el layout del dashboard con columnas
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 # Gráfico 1 en la primera columna
 with col1:

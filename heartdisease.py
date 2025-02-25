@@ -106,9 +106,7 @@ with col3:
 
 with col4:
     st.subheader("Gráfico 4 - Barras")
-    fig, ax = plt.subplots()
-    ax.scatter(data[:, 0], data[:, 1], color="red")
-    st.pyplot(fig)
+    st.bar_chart(np.random.rand(10))
 
 # Segunda fila (4 columnas)
 col5, col6, col7, col8 = st.columns(4)
